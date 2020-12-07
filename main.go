@@ -4,10 +4,10 @@ import (
 	"fmt"
 
 	"github.com/jeff-donovan/advent-of-code/problems"
+	"github.com/jeff-donovan/advent-of-code/problems/input"
 )
 
 func main() {
-	testCase := []int{1721, 979, 366, 299, 675, 1456}
-	result := problems.ReportRepair(testCase)
+	result := problems.ReportRepair(input.DAY_1_2020)
 	fmt.Println("result: ", result)
 }
