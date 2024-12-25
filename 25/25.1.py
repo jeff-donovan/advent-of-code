@@ -25,10 +25,20 @@ def is_lock(schematic):
 def is_key(schematic):
     return all([schematic[0][j] == '.' for j in range(len(schematic[0]))]) and all([schematic[-1][j] == '#' for j in range(len(schematic[0]))])
 
+def get_lock_pin_heights(lock):
+    pin_heights = []
+    for j in range(len(lock[0])):
+        height = 0
+        for i in range(len(lock)):
+            if lock[i][j] == '#':
+                height = i
+        pin_heights.append(height)
+    return pin_heights
+
 if __name__ == '__main__':
-    with open('25/day_25_input.txt', 'r') as f:
+    with open('25/day_25_test.txt', 'r') as f:
         contents = f.read()
 
     locks, keys = parse_input(contents)
-    print(len(locks))
-    print(len(keys))
+    lock_heights = [get_lock_pin_heights(lock) for lock in locks]
+    print(lock_heights)
