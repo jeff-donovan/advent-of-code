@@ -1,33 +1,34 @@
 def parse_input(contents):
-    connections = {}
-    for line in contents.split('\n'):
-        if line:
-            a, b = line.split('-')
-            if a not in connections:
-                connections[a] = set([])
-            if b not in connections:
-                connections[b] = set([])
-            connections[a].add(b)
-            connections[b].add(a)
-    return connections
+    locks = []
+    keys = []
 
-def t_in_combo(combo):
-    return combo[0].startswith('t') or combo[1].startswith('t') or combo[2].startswith('t')
+    for lock_or_key in contents.split('\n\n'):
+        if lock_or_key:
+            schematic = []
+            for line in lock_or_key.split('\n'):
+                if line:
+                    new_row = []
+                    for char in line:
+                        new_row.append(char)
+                    schematic.append(new_row)
+            if is_lock(schematic):
+                locks.append(schematic)
+            elif is_key(schematic):
+                keys.append(schematic)
+            else:
+                print('neither! ', schematic)
+    return locks, keys
+
+def is_lock(schematic):
+    return all([schematic[0][j] == '#' for j in range(len(schematic[0]))]) and all([schematic[-1][j] == '.' for j in range(len(schematic[0]))])
+
+def is_key(schematic):
+    return all([schematic[0][j] == '.' for j in range(len(schematic[0]))]) and all([schematic[-1][j] == '#' for j in range(len(schematic[0]))])
 
 if __name__ == '__main__':
     with open('25/day_25_input.txt', 'r') as f:
         contents = f.read()
 
-    connections = parse_input(contents)
-
-    multi = set([])
-    for a in connections:
-        for b in connections:
-            for c in connections:
-                a_to_b = b in connections[a]
-                b_to_c = c in connections[b]
-                c_to_a = a in connections[c]
-                if a_to_b and b_to_c and c_to_a:
-                    combo = sorted([a, b, c])
-                    multi.add((combo[0], combo[1], combo[2]))
-    print(sum([1 for combo in multi if t_in_combo(combo)]))
+    locks, keys = parse_input(contents)
+    print(len(locks))
+    print(len(keys))
