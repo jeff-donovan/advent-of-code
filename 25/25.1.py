@@ -35,10 +35,24 @@ def get_lock_pin_heights(lock):
         pin_heights.append(height)
     return pin_heights
 
+def get_key_pin_heights(key):
+    pin_heights = []
+    for j in range(len(key[0])):
+        height = 0
+        for i in range(len(key)):
+            if key[i][j] == '.':
+                height = i
+        pin_heights.append(len(key) - 2 - height)
+    return pin_heights
+
 if __name__ == '__main__':
     with open('25/day_25_test.txt', 'r') as f:
         contents = f.read()
 
     locks, keys = parse_input(contents)
+
     lock_heights = [get_lock_pin_heights(lock) for lock in locks]
     print(lock_heights)
+
+    key_heights = [get_key_pin_heights(key) for key in keys]
+    print(key_heights)
