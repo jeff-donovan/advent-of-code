@@ -55,7 +55,7 @@ def is_fit(lock, key):
     return True
 
 if __name__ == '__main__':
-    with open('25/day_25_test.txt', 'r') as f:
+    with open('25/day_25_input.txt', 'r') as f:
         contents = f.read()
 
     locks, keys = parse_input(contents)
