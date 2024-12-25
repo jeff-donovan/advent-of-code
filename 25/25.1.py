@@ -45,14 +45,25 @@ def get_key_pin_heights(key):
         pin_heights.append(len(key) - 2 - height)
     return pin_heights
 
+def is_fit(lock, key):
+    total_height = len(lock) - 2
+    lock_heights = get_lock_pin_heights(lock)
+    key_heights = get_key_pin_heights(key)
+    for column_index in range(len(lock_heights)):
+        if lock_heights[column_index] + key_heights[column_index] > total_height:
+            return False
+    return True
+
 if __name__ == '__main__':
     with open('25/day_25_test.txt', 'r') as f:
         contents = f.read()
 
     locks, keys = parse_input(contents)
 
-    lock_heights = [get_lock_pin_heights(lock) for lock in locks]
-    print(lock_heights)
-
-    key_heights = [get_key_pin_heights(key) for key in keys]
-    print(key_heights)
+    combos = 0
+    for lock in locks:
+        lock_heights = get_lock_pin_heights(lock)
+        for key in keys:
+            if is_fit(lock, key):
+                combos += 1
+    print(combos)
