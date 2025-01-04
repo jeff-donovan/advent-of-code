@@ -376,7 +376,7 @@ func preComputeGroupByAWinners(directionalPaths map[StartEnd][]string, groupByAP
 }
 
 func main() {
-	f, err := os.Open("C:/code/aoc-2024/day_21/day_21_input.txt")
+	f, err := os.Open("C:/code/aoc-2024/21/day_21_input.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
