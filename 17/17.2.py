@@ -240,7 +240,7 @@ if __name__ == '__main__':
     # MAX initial_A = 8 ** 16 - 1
     initial_A = 8 ** 15
 
-    i = 1
+    i = 5
     check_val = False
     while not check_val:
         check_val = True
