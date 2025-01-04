@@ -240,12 +240,15 @@ if __name__ == '__main__':
     # MAX initial_A = 8 ** 16 - 1
     initial_A = 8 ** 15
 
-    i = 0
-    while len(constraints) > 0:
-        check = constraints.pop(i)
-        while not check(initial_A):
+    i = 1
+    check_val = False
+    while not check_val:
+        check_val = True
+        for j in range(i + 1):
+            check = constraints[j]
+            check_val = check_val and check(initial_A)
+        if not check_val:
             initial_A += 1
-        break
 
     program = Day17(initial_A, inputs)
     try:
