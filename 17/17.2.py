@@ -236,8 +236,9 @@ if __name__ == '__main__':
         lambda initial_A: (0 == (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8),
     ]
 
-    # initial_A = 8 ** 16
-    initial_A = 1047014855769602392064
+    # MIN initial_A = 8 ** 15
+    # MAX initial_A = 8 ** 16 - 1
+    initial_A = 8 ** 15
 
     while len(constraints) > 0:
         check = constraints.pop(0)
