@@ -173,83 +173,78 @@ def is_valid(initial_A):
         (0 == (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8)
     )
 
+def check(expected, y):
+    return expected == ((((y % 8) ^ 5) ^ (y // (2 ** ((y % 8) ^ 5)))) ^ 6) % 8
+
+def get_range(y_prev, y_prev_exp):
+    return range(min_range(y_prev, y_prev_exp), max_range(y_prev, y_prev_exp))
+
+def min_range(y_prev, y_prev_exp):
+    return ((y_prev) * 8 ** y_prev_exp) // (8 ** (y_prev_exp - 1))
+
+def max_range(y_prev, y_prev_exp):
+    return ((y_prev + 1) * 8 ** y_prev_exp) // (8 ** (y_prev_exp - 1))
+
+def solution(inputs):
+    y16 = 0
+    for y15 in get_range(y16, 16):
+        if not check(inputs[15], y15):
+            continue
+        for y14 in get_range(y15, 15):
+            if not check(inputs[14], y14):
+                continue
+            for y13 in get_range(y14, 14):
+                if not check(inputs[13], y13):
+                    continue
+                for y12 in get_range(y13, 13):
+                    if not check(inputs[12], y12):
+                        continue
+                    for y11 in get_range(y12, 12):
+                        if not check(inputs[11], y11):
+                            continue
+                        for y10 in get_range(y11, 11):
+                            if not check(inputs[10], y10):
+                                continue
+                            for y9 in get_range(y10, 10):
+                                if not check(inputs[9], y9):
+                                    continue
+                                for y8 in get_range(y9, 9):
+                                    if not check(inputs[8], y8):
+                                        continue
+                                    for y7 in get_range(y8, 8):
+                                        if not check(inputs[7], y7):
+                                            continue
+                                        for y6 in get_range(y7, 7):
+                                            if not check(inputs[6], y6):
+                                                continue
+                                            for y5 in get_range(y6, 6):
+                                                if not check(inputs[5], y5):
+                                                    continue
+                                                for y4 in get_range(y5, 5):
+                                                    if not check(inputs[4], y4):
+                                                        continue
+                                                    for y3 in get_range(y4, 4):
+                                                        if not check(inputs[3], y3):
+                                                            continue
+                                                        for y2 in get_range(y3, 3):
+                                                            if not check(inputs[2], y2):
+                                                                continue
+                                                            for y1 in get_range(y2, 2):
+                                                                if not check(inputs[1], y1):
+                                                                    continue
+                                                                for y0 in get_range(y1, 1):
+                                                                    if not check(inputs[0], y0):
+                                                                        continue
+                                                                    return y0
+
 if __name__ == '__main__':
     with open('17/day_17_input.txt', 'r') as f:
         contents = f.read()
 
     registers, inputs = parse_contents(contents)
 
-    # a = 168046722  # what i left off at last time
-
-    # start = datetime.datetime.now()
-    # a = 0
-    # while True:
-    #     print('register a: ', a)
-    #     program = Day17(a, inputs)
-    #     program.run()
-    #     if program.is_copy():
-    #         print('SOLUTION IS: ', a)
-    #         break
-    #     a += 1
-    # print('SOLUTION APPROACH 1 TOOK: ', datetime.datetime.now() - start)
-    # print()
-
     start = datetime.datetime.now()
-    # # initial_A = 29641936
-    # initial_A = 281474976710655
-    # initial_A = 2251799813685247  # I think initial_A MUST BE BELOW THIS NUMBER
-    # initial_A = 2251799813685250
-    # low = 8 ** 16
-    # high = 8 ** 17
-    # initial_A = -1
-    # initial_A = 8 ** 16
-    # initial_A = 281475043819520
-
-    # while low <= high:
-    #     mid = (low + high) // 2
-    #     if is_valid(mid):
-    #     # if 1 == ((((((((((((((((mid // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8:
-    #         initial_A = mid
-    #         high = mid - 1
-    #     else:
-    #         low = mid + 1
-    # while not is_valid(initial_A):
-    #     initial_A += 1
-
-    constraints = [
-        lambda initial_A: (2 == ((((initial_A % 8) ^ 5) ^ (initial_A // (2 ** ((initial_A % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (4 == (((((initial_A // 8) % 8) ^ 5) ^ ((initial_A // 8) // (2 ** (((initial_A // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (1 == ((((((initial_A // 8) // 8) % 8) ^ 5) ^ (((initial_A // 8) // 8) // (2 ** ((((initial_A // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (5 == (((((((initial_A // 8) // 8) // 8) % 8) ^ 5) ^ ((((initial_A // 8) // 8) // 8) // (2 ** (((((initial_A // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (7 == ((((((((initial_A // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((initial_A // 8) // 8) // 8) // 8) // (2 ** ((((((initial_A // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (5 == (((((((((initial_A // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((initial_A // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((initial_A // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (4 == ((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** ((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (5 == (((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (0 == ((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** ((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (3 == (((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (1 == ((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** ((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (6 == (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (5 == ((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** ((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (5 == (((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (3 == ((((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** ((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (0 == (((((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5) ^ ((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // (2 ** (((((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) % 8) ^ 5)))) ^ 6) % 8),
-        lambda initial_A: (0 == (((((((((((((((initial_A // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8) // 8),
-    ]
-
-    # MIN initial_A = 8 ** 15
-    # MAX initial_A = 8 ** 16 - 1
-    initial_A = 8 ** 15
-
-    i = 5
-    check_val = False
-    while not check_val:
-        check_val = True
-        for j in range(i + 1):
-            check = constraints[j]
-            check_val = check_val and check(initial_A)
-        if not check_val:
-            initial_A += 1
-
+    initial_A = solution(inputs)
     program = Day17(initial_A, inputs)
     try:
         program.run()
@@ -257,31 +252,5 @@ if __name__ == '__main__':
             print('SOLUTION IS: ', initial_A)
     except:
         print('NOPE!')
-        print(f'{i} constraint - {initial_A} - {program.outputs}')
 
     print('TOOK: ', datetime.datetime.now() - start)
-
-    # start = datetime.datetime.now()
-    # # a = 2563700000  # what i left off at last time
-    # a = 0
-    # num_outputs = 0
-    # while a < 1001:
-    #     # if a % 100 == 0:
-    #     #     print('register a: ', a)
-    #     program = Day17(a, inputs)
-    #     try:
-    #         program.run()
-    #         if program.is_copy():
-    #             print('SOLUTION IS: ', a)
-    #             break
-    #         a += 1
-    #     except:
-    #         a += 1
-
-    #     # if len(program.outputs) >= num_outputs:
-    #     #     num_outputs = len(program.outputs)
-    #     #     print(f'{num_outputs} OUTPUTS | {a}')
-    #     num_outputs = len(program.outputs)
-    #     print(f'{num_outputs} OUTPUTS | {a - 1}')  # remember - we've already incremented a
-    # print('SOLUTION APPROACH 3 TOOK: ', datetime.datetime.now() - start)
-    # print()
