@@ -240,14 +240,23 @@ if __name__ == '__main__':
     # MAX initial_A = 8 ** 16 - 1
     initial_A = 8 ** 15
 
+    i = 0
     while len(constraints) > 0:
-        check = constraints.pop(0)
+        check = constraints.pop(i)
         while not check(initial_A):
             initial_A += 1
-        print(initial_A)
+        break
 
-    print(initial_A)
-    print('SOLUTION APPROACH 2 TOOK: ', datetime.datetime.now() - start)
+    program = Day17(initial_A, inputs)
+    try:
+        program.run()
+        if program.is_copy():
+            print('SOLUTION IS: ', initial_A)
+    except:
+        print('NOPE!')
+        print(f'{i} constraint - {initial_A} - {program.outputs}')
+
+    print('TOOK: ', datetime.datetime.now() - start)
 
     # start = datetime.datetime.now()
     # # a = 2563700000  # what i left off at last time
