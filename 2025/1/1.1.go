@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -19,6 +21,26 @@ func parseInput(f *os.File) ([]string, error) {
 	}
 
 	return lines, nil
+}
+
+func calculatePassword(lines []string) int {
+	current := 50
+	password := 0
+
+	for _, line := range lines {
+		num, _ := strconv.Atoi(line[1:])
+		if strings.HasPrefix(line, "R") {
+			current = (current + num) % 100
+		} else {
+			current = (current - num) % 100
+		}
+
+		if current == 0 {
+			password += 1
+		}
+	}
+
+	return password
 }
 
 func main() {
@@ -37,9 +59,7 @@ func main() {
 
 	start := time.Now()
 
-	for _, code := range lines {
-		fmt.Println(code)
-	}
+	fmt.Println(calculatePassword(lines))
 
 	fmt.Println("took: ", time.Since(start))
 }
