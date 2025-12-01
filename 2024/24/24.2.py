@@ -91,7 +91,7 @@ def binary_addition(x_val, y_val):
     return bin(int(x_val, 2) + int(y_val, 2))[2:]
 
 if __name__ == '__main__':
-    with open('C:/code/aoc-2024/24/day_24_edit_input.txt', 'r') as f:
+    with open('C:/code/advent-of-code/2024/24/day_24_edit_input.txt', 'r') as f:
         contents = f.read()
 
     values, gates = parse_input(contents)

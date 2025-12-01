@@ -1,3 +1,3 @@
-module github.com/jeff-donovan/aoc-2024
+module github.com/jeff-donovan/advent-of-code
 
 go 1.23.4
