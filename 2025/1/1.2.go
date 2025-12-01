@@ -29,9 +29,6 @@ func calculatePassword(lines []string) int {
 
 	for _, line := range lines {
 		num, _ := strconv.Atoi(line[1:])
-		// fmt.Println("current: ", current)
-		// fmt.Println("password: ", password)
-		// fmt.Println("line: ", line)
 		if strings.HasPrefix(line, "R") {
 			clicks := (num + current) / 100
 			password += clicks
