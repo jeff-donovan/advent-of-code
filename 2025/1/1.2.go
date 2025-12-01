@@ -45,7 +45,7 @@ func calculatePassword(lines []string) int {
 			if num > diff {
 				password += 1
 			}
-			additionalClicks := (num - diff) / 100
+			additionalClicks := abs((num - diff) / 100)
 			current = (current - num) % 100
 			if current == 0 {
 				additionalClicks = additionalClicks - 1
@@ -59,6 +59,13 @@ func calculatePassword(lines []string) int {
 	}
 
 	return password
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
 
 func main() {
