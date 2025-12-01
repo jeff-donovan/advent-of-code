@@ -30,31 +30,19 @@ func calculatePassword(lines []string) int {
 	for _, line := range lines {
 		num, _ := strconv.Atoi(line[1:])
 		if strings.HasPrefix(line, "R") {
-			diff := 100 - current
-			if num > diff {
-				password += 1
-			}
-			additionalClicks := (num - diff) / 100
+			clicks := (num + current) / 100
+			password += clicks
 			current = (current + num) % 100
-			if current == 0 {
-				additionalClicks = additionalClicks - 1
+			if current == 0 && clicks > 0 {
+				password -= 1
 			}
-			password += additionalClicks
 		} else {
-			diff := current
-			if num > diff {
-				password += 1
-			}
-			additionalClicks := abs((num - diff) / 100)
+			clicks := (num + (100 - current)) / 100
+			password += clicks
 			current = (current - num) % 100
-			if current == 0 {
-				additionalClicks = additionalClicks - 1
+			if current == 0 && clicks > 0 {
+				password -= 1
 			}
-			password += additionalClicks
-		}
-
-		if current == 0 {
-			password += 1
 		}
 	}
 
