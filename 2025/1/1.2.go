@@ -29,9 +29,9 @@ func calculatePassword(lines []string) int {
 
 	for _, line := range lines {
 		num, _ := strconv.Atoi(line[1:])
-		fmt.Println("current: ", current)
-		fmt.Println("password: ", password)
-		fmt.Println("line: ", line)
+		// fmt.Println("current: ", current)
+		// fmt.Println("password: ", password)
+		// fmt.Println("line: ", line)
 		if strings.HasPrefix(line, "R") {
 			clicks := (num + current) / 100
 			password += clicks
@@ -57,8 +57,8 @@ func mod(x, y int) int {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
