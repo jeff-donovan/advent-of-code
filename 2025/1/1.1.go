@@ -43,9 +43,47 @@ func calculatePassword(lines []string) int {
 	return password
 }
 
+func calculatePasswordPart2(lines []string) int {
+	current := 50
+	password := 0
+
+	for _, line := range lines {
+		num, _ := strconv.Atoi(line[1:])
+		if strings.HasPrefix(line, "R") {
+			diff := 100 - current
+			if num > diff {
+				password += 1
+			}
+			additionalClicks := (num - diff) / 100
+			current = (current + num) % 100
+			if current == 0 {
+				additionalClicks = additionalClicks - 1
+			}
+			password += additionalClicks
+		} else {
+			diff := current
+			if num > diff {
+				password += 1
+			}
+			additionalClicks := (num - diff) / 100
+			current = (current - num) % 100
+			if current == 0 {
+				additionalClicks = additionalClicks - 1
+			}
+			password += additionalClicks
+		}
+
+		if current == 0 {
+			password += 1
+		}
+	}
+
+	return password
+}
+
 func main() {
-	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
-	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
@@ -59,7 +97,8 @@ func main() {
 
 	start := time.Now()
 
-	fmt.Println(calculatePassword(lines))
+	// fmt.Println(calculatePassword(lines))
+	fmt.Println(calculatePasswordPart2(lines))
 
 	fmt.Println("took: ", time.Since(start))
 }
