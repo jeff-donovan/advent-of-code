@@ -44,8 +44,8 @@ func calculatePassword(lines []string) int {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/1/day_1_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
