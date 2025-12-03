@@ -69,17 +69,22 @@ func main() {
 
 	start := time.Now()
 
+	var invalidIds []int
 	ranges := parseRanges(lines)
-
-	for i, r := range ranges {
-		fmt.Println(i)
-		fmt.Println(r)
-		fmt.Println()
+	for _, r := range ranges {
+		for id := r.Start; id <= r.End; id++ {
+			if !isValidId(id) {
+				invalidIds = append(invalidIds, id)
+			}
+		}
 	}
 
-	fmt.Println("123123", isValidId(123123))
-	fmt.Println("124123", isValidId(124123))
-	fmt.Println("12412", isValidId(12412))
+	var total int
+	for _, id := range invalidIds {
+		total += id
+	}
+
+	fmt.Println("Answer: ", total)
 
 	fmt.Println("took: ", time.Since(start))
 }
