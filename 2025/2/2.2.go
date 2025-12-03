@@ -61,8 +61,8 @@ func isValidId(id int) bool {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
@@ -88,7 +88,6 @@ func main() {
 
 	var total int
 	for _, id := range invalidIds {
-		fmt.Println(id)
 		total += id
 	}
 
