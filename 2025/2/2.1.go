@@ -42,6 +42,17 @@ func parseRanges(lines []string) []Range {
 	return ranges
 }
 
+func isValidId(id int) bool {
+	idString := strconv.Itoa(id)
+
+	// numbers with an odd number of digits are by definition valid
+	if (len(idString) % 2) != 0 {
+		return true
+	}
+
+	return idString[0:len(idString)/2] != idString[len(idString)/2:]
+}
+
 func main() {
 	// f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_input.txt")
 	f, err := os.Open("C:/code/advent-of-code/2025/2/day_2_test.txt")
@@ -65,6 +76,10 @@ func main() {
 		fmt.Println(r)
 		fmt.Println()
 	}
+
+	fmt.Println("123123", isValidId(123123))
+	fmt.Println("124123", isValidId(124123))
+	fmt.Println("12412", isValidId(12412))
 
 	fmt.Println("took: ", time.Since(start))
 }
