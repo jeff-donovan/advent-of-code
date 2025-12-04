@@ -46,8 +46,8 @@ func isRollOfPaper(grid []string, i int, j int) bool {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
