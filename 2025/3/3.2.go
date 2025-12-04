@@ -64,8 +64,8 @@ func calculateLargestBankVoltage(bank string, numBatteries int) int {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/3/day_3_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/3/day_3_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/3/day_3_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/3/day_3_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
