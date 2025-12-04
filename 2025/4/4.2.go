@@ -62,6 +62,18 @@ func makeNewGrid(grid []string, remove []Coords) []string {
 	return newGrid
 }
 
+func processGrid(grid []string) []Coords {
+	var remove []Coords
+	for i := 0; i < len(grid[0]); i++ {
+		for j := 0; j < len(grid); j++ {
+			if isRollOfPaper(grid, i, j) && canRollOfPaperBeAccessed(grid, i, j) {
+				remove = append(remove, Coords{i, j})
+			}
+		}
+	}
+	return remove
+}
+
 func main() {
 	// f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_input.txt")
 	f, err := os.Open("C:/code/advent-of-code/2025/4/day_4_test.txt")
@@ -78,25 +90,18 @@ func main() {
 
 	start := time.Now()
 
-	total := 0
+	iterations := 0
+	totalRemoved := 0
 	var remove []Coords
-	for i := 0; i < len(grid[0]); i++ {
-		for j := 0; j < len(grid); j++ {
-			if isRollOfPaper(grid, i, j) && canRollOfPaperBeAccessed(grid, i, j) {
-				// if isRollOfPaper(grid, i, j) {
-				fmt.Printf("roll of paper! %d, %d\n", i, j)
-				remove = append(remove, Coords{i, j})
-				total += 1
-			}
-		}
+
+	for iterations == 0 || len(remove) > 0 {
+		totalRemoved += len(remove)
+		grid = makeNewGrid(grid, remove)
+		remove = processGrid(grid)
+		iterations += 1
 	}
 
-	newGrid := makeNewGrid(grid, remove)
-	for _, line := range newGrid {
-		fmt.Println(line)
-	}
-
-	fmt.Println("Answer: ", total)
+	fmt.Println("Answer: ", totalRemoved)
 
 	fmt.Println("took: ", time.Since(start))
 }
