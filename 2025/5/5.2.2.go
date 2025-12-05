@@ -1,46 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"slices"
-	"strconv"
-	"strings"
-	"time"
 )
-
-type Range struct {
-	start int
-	end   int
-}
-
-func parseInput(f *os.File) ([]string, error) {
-	var lines []string
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return lines, nil
-}
-
-func getRanges(lines []string) []Range {
-	var ranges []Range
-	for _, line := range lines {
-		if strings.Contains(line, "-") {
-			startEndStrings := strings.Split(line, "-")
-			start, _ := strconv.Atoi(startEndStrings[0])
-			end, _ := strconv.Atoi(startEndStrings[1])
-			ranges = append(ranges, Range{start, end})
-		}
-	}
-	return ranges
-}
 
 func sortRanges(ranges []Range) {
 	slices.SortFunc(ranges, func(a, b Range) int {
@@ -119,7 +82,7 @@ func dedupe(ranges []Range) []Range {
 	return finalRanges
 }
 
-func algorithm(ranges []Range) int {
+func helperAlgorithm5_2_2(ranges []Range) int {
 	// get overlapping ranges
 	// while there are overlapping ranges, do the following:
 	//   1. make a list of newRanges from the overlapping ranges
@@ -199,22 +162,7 @@ func algorithm(ranges []Range) int {
 	return total
 }
 
-func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_test.txt")
-	if err != nil {
-		fmt.Println("Error opening file", err)
-		return
-	}
-
-	defer f.Close()
-	lines, err := parseInput(f)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-	}
-
-	start := time.Now()
-
+func algorithm5_2_2(lines []string) int {
 	ranges := getRanges(lines)
 	// sortRanges(ranges)
 
@@ -239,7 +187,5 @@ func main() {
 	// for _, r := range newRanges {
 	// 	total += r.end - r.start + 1
 	// }
-	fmt.Println("Answer: ", algorithm(ranges))
-
-	fmt.Println("took: ", time.Since(start))
+	return helperAlgorithm5_2_2(ranges)
 }
