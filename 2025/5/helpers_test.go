@@ -52,6 +52,21 @@ func TestMergeRangesUntilOne(t *testing.T) {
 			a:    nil,
 			want: nil,
 		},
+		{
+			name: "merge for 2 dupes returns slice of 1",
+			a:    []Range{{1, 2}, {1, 2}},
+			want: []Range{{1, 2}},
+		},
+		{
+			name: "merge for 3 dupes returns slice of 1",
+			a:    []Range{{1, 2}, {1, 2}, {1, 2}},
+			want: []Range{{1, 2}},
+		},
+		{
+			name: "merge for 3 overlaps returns min start, max end",
+			a:    []Range{{1, 3}, {2, 4}, {2, 3}},
+			want: []Range{{1, 4}},
+		},
 	}
 
 	for _, tc := range tests {
