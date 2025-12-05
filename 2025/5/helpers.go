@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -60,4 +61,35 @@ func dedupe(ranges []Range) []Range {
 	}
 
 	return finalRanges
+}
+
+func mergeRangesUntilOne(ranges []Range) []Range {
+	if len(ranges) <= 1 {
+		return ranges
+	}
+
+	newFirstMergedRange := mergeRanges(ranges[0], ranges[1])
+	if len(ranges) == 2 {
+		return []Range{newFirstMergedRange}
+	}
+
+	return mergeRangesUntilOne(slices.Concat([]Range{newFirstMergedRange}, ranges[2:]))
+}
+
+func mergeRanges(a, b Range) Range {
+	if !isOverlapping(a, b) {
+		panic("oops!")
+	}
+
+	minStart := a.start
+	if b.start < minStart {
+		minStart = b.start
+	}
+
+	maxEnd := a.end
+	if b.end > maxEnd {
+		maxEnd = b.end
+	}
+
+	return Range{minStart, maxEnd}
 }
