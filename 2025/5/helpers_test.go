@@ -41,6 +41,29 @@ func rangeEqual(a, b Range) bool {
 	return a.start == b.start && a.end == b.end
 }
 
+func TestMergeRangesUntilOne(t *testing.T) {
+	tests := []struct {
+		name string
+		a    []Range
+		want []Range
+	}{
+		{
+			name: "merge for empty slice returns empty slice",
+			a:    nil,
+			want: nil,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := mergeRangesUntilOne(tc.a)
+			if !rangeSlicesEqual(got, tc.want) {
+				t.Fatalf("TestMergeRangesUntilOne(%v) = %v, want %v", tc.a, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestMergeRanges_PanicsWhenRangesDontOverlap(t *testing.T) {
 	defer func() {
 		if r := recover(); r == nil {
