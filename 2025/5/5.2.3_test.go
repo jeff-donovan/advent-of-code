@@ -10,8 +10,20 @@ func TestIsOverlapping3(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "simple overlap",
+			name: "same ranges overlap",
 			a:    Range{1, 1},
+			b:    Range{1, 1},
+			want: true,
+		},
+		{
+			name: "inner range and outer range overlap",
+			a:    Range{1, 1},
+			b:    Range{0, 2},
+			want: true,
+		},
+		{
+			name: "inner range and outer range overlap - flipped",
+			a:    Range{0, 2},
 			b:    Range{1, 1},
 			want: true,
 		},
