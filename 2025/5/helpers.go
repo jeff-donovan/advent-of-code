@@ -42,3 +42,22 @@ func getRanges(lines []string) []Range {
 func isOverlapping(a, b Range) bool {
 	return (a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end)
 }
+
+func dedupe(ranges []Range) []Range {
+	var finalRanges []Range
+
+	for _, r1 := range ranges {
+		seen := false
+		for _, r2 := range finalRanges {
+			if r1.start == r2.start && r1.end == r2.end {
+				seen = true
+				break
+			}
+		}
+		if !seen {
+			finalRanges = append(finalRanges, r1)
+		}
+	}
+
+	return finalRanges
+}

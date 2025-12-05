@@ -2,6 +2,68 @@ package main
 
 import "testing"
 
+func rangeSlicesEqual(a, b []Range) bool {
+	// same length
+	// all elements in a are in b
+	// all elements in b are in a
+	if len(a) != len(b) {
+		return false
+	}
+
+	for _, ra := range a {
+		seen := false
+		for _, rb := range b {
+			if rangeEqual(ra, rb) {
+				seen = true
+			}
+		}
+		if !seen {
+			return false
+		}
+	}
+
+	for _, rb := range b {
+		seen := false
+		for _, ra := range a {
+			if rangeEqual(rb, ra) {
+				seen = true
+			}
+		}
+		if !seen {
+			return false
+		}
+	}
+
+	return true
+}
+
+func rangeEqual(a, b Range) bool {
+	return a.start == b.start && a.end == b.end
+}
+
+func TestDedupe(t *testing.T) {
+	tests := []struct {
+		name string
+		a    []Range
+		want []Range
+	}{
+		{
+			name: "two duplicate ranges reduced to 1",
+			a:    []Range{{1, 1}, {1, 1}},
+			want: []Range{{1, 1}},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := dedupe(tc.a)
+			if !rangeSlicesEqual(got, tc.want) {
+				t.Fatalf("dedupe(%v) = %v, want %v", tc.a, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestIsOverlapping(t *testing.T) {
 	tests := []struct {
 		name string

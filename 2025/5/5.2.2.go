@@ -57,27 +57,6 @@ func getOverlappingRanges(ranges []Range) []Range {
 	return dedupe(overlappingRanges)
 }
 
-func dedupe(ranges []Range) []Range {
-	var finalRanges []Range
-	fmt.Println("dedupe - ranges before: ", ranges)
-
-	for _, r1 := range ranges {
-		seen := false
-		for _, r2 := range finalRanges {
-			if r1.start == r2.start && r1.end == r2.end {
-				seen = true
-				break
-			}
-		}
-		if !seen {
-			finalRanges = append(finalRanges, r1)
-		}
-	}
-
-	fmt.Println("dedupe - ranges after: ", finalRanges)
-	return finalRanges
-}
-
 func helperAlgorithm5_2_2(ranges []Range) int {
 	// get overlapping ranges
 	// while there are overlapping ranges, do the following:
