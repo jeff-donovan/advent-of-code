@@ -53,8 +53,8 @@ func getAvailableIngredientIds(lines []string) []int {
 }
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
