@@ -100,6 +100,7 @@ func getOverlappingRanges(ranges []Range) []Range {
 
 func dedupe(ranges []Range) []Range {
 	var finalRanges []Range
+	fmt.Println("dedupe - ranges before: ", ranges)
 
 	for _, r1 := range ranges {
 		seen := false
@@ -114,6 +115,7 @@ func dedupe(ranges []Range) []Range {
 		}
 	}
 
+	fmt.Println("dedupe - ranges after: ", finalRanges)
 	return finalRanges
 }
 
