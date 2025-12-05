@@ -83,17 +83,16 @@ func getOverlappingRanges(ranges []Range) []Range {
 	var overlappingRanges []Range
 
 	for _, r1 := range ranges {
-		var overlaps []Range
 		for _, r2 := range ranges {
 			if r1.start == r2.start && r1.end == r2.end {
 				continue
 			}
 
 			if isOverlapping(r1, r2) {
-				overlaps = append(overlaps, mergeRanges(r1, r2))
+				overlappingRanges = append(overlappingRanges, r1)
+				overlappingRanges = append(overlappingRanges, r2)
 			}
 		}
-		overlappingRanges = append(overlappingRanges, overlaps...)
 	}
 
 	return dedupe(overlappingRanges)
@@ -139,15 +138,19 @@ func algorithm(ranges []Range) int {
 		// add nonoverlaps to finalRanges
 		// then continue with previous logic
 
-		overlapStartsSet := make(map[int]struct{})
-		for _, r := range overlaps {
-			overlapStartsSet[r.start] = struct{}{}
-		}
-
 		var nonOverlaps []Range
 		for _, r := range finalRanges {
-			_, exists := overlapStartsSet[r.start]
-			if !exists {
+			hasOverlap := false
+			for _, overlap := range overlaps {
+				if r.start == overlap.start && r.end == overlap.end {
+					continue
+				}
+				if isOverlapping(r, overlap) {
+					hasOverlap = true
+					break
+				}
+			}
+			if !hasOverlap {
 				nonOverlaps = append(nonOverlaps, r)
 			}
 		}
@@ -155,25 +158,35 @@ func algorithm(ranges []Range) int {
 		finalRanges = nil
 
 		var newRanges []Range
-		finalRangesMap := make(map[int]struct{})
 		for _, r1 := range overlaps {
-			_, exists := finalRangesMap[r1.start]
-			if exists {
-				continue
-			}
-			finalRangesMap[r1.start] = struct{}{}
-
-			var rangesWithSameStartOrEnd []Range
+			var theseOverlaps []Range
+			theseOverlaps = append(theseOverlaps, r1)
 			for _, r2 := range overlaps {
-				if r2.start == r1.start || r2.end == r1.end {
-					rangesWithSameStartOrEnd = append(rangesWithSameStartOrEnd, r2)
+				if isOverlapping(r1, r2) {
+					theseOverlaps = append(theseOverlaps, r2)
 				}
 			}
-
-			newRanges = slices.Concat(newRanges, mergeRangesUntilOne(rangesWithSameStartOrEnd))
+			newRanges = append(newRanges, mergeRangesUntilOne(theseOverlaps)...)
 		}
+		// finalRangesMap := make(map[int]struct{})
+		// for _, r1 := range overlaps {
+		// 	_, exists := finalRangesMap[r1.start]
+		// 	if exists {
+		// 		continue
+		// 	}
+		// 	finalRangesMap[r1.start] = struct{}{}
 
-		finalRanges = slices.Concat(nonOverlaps, newRanges)
+		// 	var rangesWithSameStartOrEnd []Range
+		// 	for _, r2 := range overlaps {
+		// 		if r2.start == r1.start || r2.end == r1.end {
+		// 			rangesWithSameStartOrEnd = append(rangesWithSameStartOrEnd, r2)
+		// 		}
+		// 	}
+
+		// 	newRanges = slices.Concat(newRanges, mergeRangesUntilOne(rangesWithSameStartOrEnd))
+		// }
+
+		finalRanges = slices.Concat(nonOverlaps, dedupe(newRanges))
 		overlaps = getOverlappingRanges(finalRanges)
 	}
 
