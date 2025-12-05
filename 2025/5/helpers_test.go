@@ -48,9 +48,44 @@ func TestDedupe(t *testing.T) {
 		want []Range
 	}{
 		{
+			name: "empty returns empty",
+			a:    []Range{},
+			want: []Range{},
+		},
+		{
+			name: "empty returns nil",
+			a:    []Range{},
+			want: nil,
+		},
+		{
+			name: "nil returns empty",
+			a:    nil,
+			want: []Range{},
+		},
+		{
+			name: "nil returns nil",
+			a:    nil,
+			want: nil,
+		},
+		{
 			name: "two duplicate ranges reduced to 1",
 			a:    []Range{{1, 1}, {1, 1}},
 			want: []Range{{1, 1}},
+		},
+		{
+			name: "three duplicate ranges reduced to 1",
+			a:    []Range{{1, 1}, {1, 1}, {1, 1}},
+			want: []Range{{1, 1}},
+		},
+		{
+			name: "multiple sets of dupes reduced to just theirs, order doesn't matter",
+			a:    []Range{{1, 2}, {2, 1}, {1, 2}, {2, 1}},
+			want: []Range{{2, 1}, {1, 2}},
+		},
+		{
+			name: "unduplicated sets are not removed",
+			a:    []Range{{1, 2}, {3, 4}, {1, 2}},
+			want: []Range{{3, 4}, {1, 2}},
 		},
 	}
 
