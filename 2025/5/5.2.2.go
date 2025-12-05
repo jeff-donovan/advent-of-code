@@ -49,7 +49,7 @@ func sortRanges(ranges []Range) {
 }
 
 func isOverlapping(a, b Range) bool {
-	return a.start <= b.start && b.start <= a.end
+	return (a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end)
 }
 
 func mergeRanges(a, b Range) Range {
@@ -79,9 +79,114 @@ func mergeRangesUntilOne(ranges []Range) []Range {
 	return mergeRangesUntilOne(slices.Concat([]Range{newFirstMergedRange}, ranges[2:]))
 }
 
+func getOverlappingRanges(ranges []Range) []Range {
+	var overlappingRanges []Range
+
+	for _, r1 := range ranges {
+		var overlaps []Range
+		for _, r2 := range ranges {
+			if r1.start == r2.start && r1.end == r2.end {
+				continue
+			}
+
+			if isOverlapping(r1, r2) {
+				overlaps = append(overlaps, mergeRanges(r1, r2))
+			}
+		}
+		overlappingRanges = append(overlappingRanges, overlaps...)
+	}
+
+	return dedupe(overlappingRanges)
+}
+
+func dedupe(ranges []Range) []Range {
+	var finalRanges []Range
+
+	for _, r1 := range ranges {
+		seen := false
+		for _, r2 := range finalRanges {
+			if r1.start == r2.start && r1.end == r2.end {
+				seen = true
+				break
+			}
+		}
+		if !seen {
+			finalRanges = append(finalRanges, r1)
+		}
+	}
+
+	return finalRanges
+}
+
+func algorithm(ranges []Range) int {
+	// get overlapping ranges
+	// while there are overlapping ranges, do the following:
+	//   1. make a list of newRanges from the overlapping ranges
+	//   2. get a set of all the initial ranges (that weren't in overlapping) and the newRanges (from the overlapping)
+	//   3. repeat
+
+	var finalRanges []Range
+	for _, r := range ranges {
+		finalRanges = append(finalRanges, r)
+	}
+	overlaps := getOverlappingRanges(ranges)
+	for len(overlaps) > 1 {
+		fmt.Println("hello jeff! iteration", len(overlaps))
+		fmt.Println("overlaps: ", overlaps)
+		fmt.Println("finalRanges: ", finalRanges)
+		// get overlapping set
+		// get nonoverlaps
+		// add nonoverlaps to finalRanges
+		// then continue with previous logic
+
+		overlapStartsSet := make(map[int]struct{})
+		for _, r := range overlaps {
+			overlapStartsSet[r.start] = struct{}{}
+		}
+
+		var nonOverlaps []Range
+		for _, r := range finalRanges {
+			_, exists := overlapStartsSet[r.start]
+			if !exists {
+				nonOverlaps = append(nonOverlaps, r)
+			}
+		}
+
+		finalRanges = nil
+
+		var newRanges []Range
+		finalRangesMap := make(map[int]struct{})
+		for _, r1 := range overlaps {
+			_, exists := finalRangesMap[r1.start]
+			if exists {
+				continue
+			}
+			finalRangesMap[r1.start] = struct{}{}
+
+			var rangesWithSameStartOrEnd []Range
+			for _, r2 := range overlaps {
+				if r2.start == r1.start || r2.end == r1.end {
+					rangesWithSameStartOrEnd = append(rangesWithSameStartOrEnd, r2)
+				}
+			}
+
+			newRanges = slices.Concat(newRanges, mergeRangesUntilOne(rangesWithSameStartOrEnd))
+		}
+
+		finalRanges = slices.Concat(nonOverlaps, newRanges)
+		overlaps = getOverlappingRanges(finalRanges)
+	}
+
+	total := 0
+	for _, r := range finalRanges {
+		total += (r.end - r.start) + 1
+	}
+	return total
+}
+
 func main() {
-	f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_input.txt")
-	// f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_test.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_input.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/5/day_5_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
@@ -96,45 +201,30 @@ func main() {
 	start := time.Now()
 
 	ranges := getRanges(lines)
-	sortRanges(ranges)
+	// sortRanges(ranges)
 
-	var overlappingRanges []Range
+	// var overlappingRanges []Range
 
-	for _, r1 := range ranges {
-		for _, r2 := range ranges {
-			if isOverlapping(r1, r2) {
-				overlappingRanges = append(overlappingRanges, mergeRanges(r1, r2))
-			}
-		}
-	}
+	// for _, r1 := range ranges {
+	// 	for _, r2 := range ranges {
+	// 		if isOverlapping(r1, r2) {
+	// 			overlappingRanges = append(overlappingRanges, mergeRanges(r1, r2))
+	// 		}
+	// 	}
+	// }
 
-	var newRanges []Range
-	finalRangesMap := make(map[int]struct{})
-	for _, r1 := range overlappingRanges {
-		_, exists := finalRangesMap[r1.start]
-		if exists {
-			continue
-		}
-		finalRangesMap[r1.start] = struct{}{}
+	// for _, r := range newRanges {
+	// 	fmt.Println(r)
+	// }
 
-		var rangesWithSameStart []Range
-		for _, r2 := range overlappingRanges {
-			if r2.start == r1.start {
-				rangesWithSameStart = append(rangesWithSameStart, r2)
-			}
-		}
+	// fmt.Println("Num Ranges: ", len(ranges))
+	// fmt.Println("Num new ranges: ", len(newRanges))
 
-		newRanges = slices.Concat(newRanges, mergeRangesUntilOne(rangesWithSameStart))
-	}
-
-	for _, r := range newRanges {
-		fmt.Println(r)
-	}
-
-	fmt.Println("Num Ranges: ", len(ranges))
-	fmt.Println("Num new ranges: ", len(newRanges))
-
-	// fmt.Println("Answer: ", len(freshIds))
+	// total := 0
+	// for _, r := range newRanges {
+	// 	total += r.end - r.start + 1
+	// }
+	fmt.Println("Answer: ", algorithm(ranges))
 
 	fmt.Println("took: ", time.Since(start))
 }
