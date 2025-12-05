@@ -27,6 +27,18 @@ func TestIsOverlapping3(t *testing.T) {
 			b:    Range{1, 1},
 			want: true,
 		},
+		{
+			name: "",
+			a:    Range{1, 3},
+			b:    Range{2, 4},
+			want: true,
+		},
+		{
+			name: "",
+			a:    Range{0, 1},
+			b:    Range{2, 3},
+			want: false,
+		},
 	}
 
 	for _, tc := range tests {
