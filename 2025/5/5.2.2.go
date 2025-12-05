@@ -11,10 +11,6 @@ func sortRanges(ranges []Range) {
 	})
 }
 
-func isOverlapping(a, b Range) bool {
-	return (a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end)
-}
-
 func mergeRanges(a, b Range) Range {
 	minStart := a.start
 	if b.start < minStart {

@@ -1,9 +1,5 @@
 package main
 
-func isOverlapping3(a, b Range) bool {
-	return (a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end)
-}
-
 func algorithm5_2_3(lines []string) int {
 	ranges := getRanges(lines)
 

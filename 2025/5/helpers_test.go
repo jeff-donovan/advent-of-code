@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func TestIsOverlapping3(t *testing.T) {
+func TestIsOverlapping(t *testing.T) {
 	tests := []struct {
 		name string
 		a    Range
@@ -43,7 +43,7 @@ func TestIsOverlapping3(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := isOverlapping3(tc.a, tc.b)
+			got := isOverlapping(tc.a, tc.b)
 			if got != tc.want {
 				t.Fatalf("isOverlapping(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
 			}

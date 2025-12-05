@@ -38,3 +38,7 @@ func getRanges(lines []string) []Range {
 	}
 	return ranges
 }
+
+func isOverlapping(a, b Range) bool {
+	return (a.start <= b.start && b.start <= a.end) || (b.start <= a.start && a.start <= b.end)
+}
