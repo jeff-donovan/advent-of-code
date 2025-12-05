@@ -62,6 +62,11 @@ func TestMergeRanges(t *testing.T) {
 			a:    []Range{{1, 2}, {1, 2}},
 			want: []Range{{1, 2}},
 		},
+		{
+			name: "merge still grabs min start, max end, even if ranges don't overlap",
+			a:    []Range{{1, 2}, {3, 4}},
+			want: []Range{{1, 4}},
+		},
 	}
 
 	for _, tc := range tests {
