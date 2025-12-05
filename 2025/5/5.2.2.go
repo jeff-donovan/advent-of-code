@@ -79,7 +79,7 @@ func helperAlgorithm5_2_2(ranges []Range) int {
 					theseOverlaps = append(theseOverlaps, r2)
 				}
 			}
-			newRanges = append(newRanges, mergeRangesUntilOne(theseOverlaps)...)
+			newRanges = append(newRanges, mergeRanges(theseOverlaps)...)
 		}
 		// finalRangesMap := make(map[int]struct{})
 		// for _, r1 := range overlaps {
@@ -96,7 +96,7 @@ func helperAlgorithm5_2_2(ranges []Range) int {
 		// 		}
 		// 	}
 
-		// 	newRanges = slices.Concat(newRanges, mergeRangesUntilOne(rangesWithSameStartOrEnd))
+		// 	newRanges = slices.Concat(newRanges, mergeRanges(rangesWithSameStartOrEnd))
 		// }
 
 		finalRanges = slices.Concat(nonOverlaps, dedupe(newRanges))

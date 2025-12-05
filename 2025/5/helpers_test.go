@@ -41,98 +41,34 @@ func rangeEqual(a, b Range) bool {
 	return a.start == b.start && a.end == b.end
 }
 
-func TestMergeRangesUntilOne(t *testing.T) {
+func TestMergeRanges(t *testing.T) {
 	tests := []struct {
 		name string
 		a    []Range
 		want []Range
 	}{
 		{
-			name: "merge for empty slice returns empty slice",
+			name: "merge for empty returns empty",
 			a:    nil,
 			want: nil,
 		},
 		{
-			name: "merge for 2 dupes returns slice of 1",
+			name: "merge for slice of 1 range returns same slice",
+			a:    []Range{{1, 2}},
+			want: []Range{{1, 2}},
+		},
+		{
+			name: "merge for the same ranges returns the same range",
 			a:    []Range{{1, 2}, {1, 2}},
 			want: []Range{{1, 2}},
 		},
-		{
-			name: "merge for 3 dupes returns slice of 1",
-			a:    []Range{{1, 2}, {1, 2}, {1, 2}},
-			want: []Range{{1, 2}},
-		},
-		{
-			name: "merge for 3 overlaps returns min start, max end",
-			a:    []Range{{1, 3}, {2, 4}, {2, 3}},
-			want: []Range{{1, 4}},
-		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			got := mergeRangesUntilOne(tc.a)
+			got := mergeRanges(tc.a)
 			if !rangeSlicesEqual(got, tc.want) {
-				t.Fatalf("TestMergeRangesUntilOne(%v) = %v, want %v", tc.a, got, tc.want)
-			}
-		})
-	}
-}
-
-func TestMergeRanges_PanicsWhenRangesDontOverlap(t *testing.T) {
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatalf("expected mergeRanges to panic, but it did not")
-		}
-	}()
-
-	mergeRanges(Range{1, 2}, Range{3, 4})
-}
-
-func TestMergeRanges(t *testing.T) {
-	tests := []struct {
-		name string
-		a    Range
-		b    Range
-		want Range
-	}{
-		{
-			name: "merge for the same ranges returns the same range",
-			a:    Range{1, 2},
-			b:    Range{1, 2},
-			want: Range{1, 2},
-		},
-		{
-			name: "merge for ranges where one is completely outer",
-			a:    Range{1, 4},
-			b:    Range{2, 3},
-			want: Range{1, 4},
-		},
-		{
-			name: "merge for ranges where a extends to b",
-			a:    Range{1, 2},
-			b:    Range{2, 3},
-			want: Range{1, 3},
-		},
-		{
-			name: "merge for ranges where a extends to b - flipped inputs",
-			a:    Range{2, 3},
-			b:    Range{1, 2},
-			want: Range{1, 3},
-		},
-		{
-			name: "merge for overlapping ranges",
-			a:    Range{1, 3},
-			b:    Range{2, 4},
-			want: Range{1, 4},
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			got := mergeRanges(tc.a, tc.b)
-			if !rangeEqual(got, tc.want) {
-				t.Fatalf("mergeRanges(%v, %v) = %v, want %v", tc.a, tc.b, got, tc.want)
+				t.Fatalf("mergeRanges(%v) = %v, want %v", tc.a, got, tc.want)
 			}
 		})
 	}
