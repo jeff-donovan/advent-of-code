@@ -50,7 +50,7 @@ func processThisRound(ranges []Range) []Range {
 	return dedupe(finalRanges)
 }
 
-func algorithm5_2_3(lines []string) int {
+func algorithm5_2(lines []string) int {
 	ranges := getRanges(lines)
 
 	fmt.Println("ranges before: ", ranges)
