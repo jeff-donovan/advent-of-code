@@ -84,7 +84,7 @@ func getOverlappingRanges(ranges []Range) []Range {
 
 	for _, r1 := range ranges {
 		for _, r2 := range ranges {
-			if r1.start == r2.start && r1.end == r2.end {
+			if r1 == r2 {
 				continue
 			}
 
@@ -129,7 +129,7 @@ func algorithm(ranges []Range) int {
 		finalRanges = append(finalRanges, r)
 	}
 	overlaps := getOverlappingRanges(ranges)
-	for len(overlaps) > 1 {
+	for len(overlaps) >= 1 {
 		fmt.Println("hello jeff! iteration", len(overlaps))
 		fmt.Println("overlaps: ", overlaps)
 		fmt.Println("finalRanges: ", finalRanges)
