@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"slices"
 	"strings"
 )
@@ -59,12 +58,17 @@ func findIndexesOfSplittersForRow(grid []string, rowIndex int) []int {
 
 func algorithm7_1(lines []string) int {
 	total := 0
-	for rowNum := 0; rowNum < len(lines)-1; rowNum++ {
-		lines = updateNextGridRow(lines, rowNum)
+	for rowIndex := 0; rowIndex < len(lines)-1; rowIndex++ {
+		lines = updateNextGridRow(lines, rowIndex)
 	}
 
-	for _, l := range lines {
-		fmt.Println(l)
+	for rowIndex := 0; rowIndex < len(lines); rowIndex++ {
+		splitters := findIndexesOfSplittersForRow(lines, rowIndex)
+		for _, splitterIndex := range splitters {
+			if string(lines[rowIndex-1][splitterIndex]) == "|" {
+				total += 1
+			}
+		}
 	}
 	return total
 }
