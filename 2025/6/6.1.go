@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -10,8 +11,20 @@ type MathProblem struct {
 	nums      []int
 }
 
-func mapInputToMathProblems(lines []string) []MathProblem {
-	return nil
+func mapInputToMathProblems(lines [][]string) []MathProblem {
+	var problems []MathProblem
+	operationIndex := len(lines) - 1
+	numProblems := len(lines[0])
+	for n := 0; n < numProblems; n++ {
+		operation := lines[operationIndex][n]
+		var nums []int
+		for j := 0; j < operationIndex; j++ {
+			num, _ := strconv.Atoi(lines[j][n])
+			nums = append(nums, num)
+		}
+		problems = append(problems, MathProblem{operation, nums})
+	}
+	return problems
 }
 
 func cleanLines(lines []string) [][]string {
@@ -32,8 +45,7 @@ func cleanLines(lines []string) [][]string {
 }
 
 func algorithm6_1(lines []string) int {
-	problems := cleanLines(lines)
-	// problems := mapInputToMathProblems(lines)
+	problems := mapInputToMathProblems(cleanLines(lines))
 	for _, p := range problems {
 		fmt.Println(p)
 	}
