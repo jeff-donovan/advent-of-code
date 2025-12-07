@@ -33,16 +33,40 @@ func isLegalCoord(lines []string, c Coord) bool {
 }
 
 func algorithm7_2(lines []string) int {
-	startIndex := strings.Index(lines[0], "S")
-	timelines := []Coord{{0, startIndex}}
+	// plan
+	//  - make a map of all coords to scores
+	//  - i think give every dot in the last row a score of 1
+	//  - loop backwards from bottom row to top
+	//    - if it's a ^ then its score is 0
+	//    - if it's a dot, use travelToNextRow() to figure out which spots it could travel to in the next row
+	//    - score for the coord is the sum of the scores for the legal moves it could travel to
+	//  - work all the way back up to the first row
+	//  - return the score for the "S"
 
-	for rowIndex := 0; rowIndex < len(lines)-1; rowIndex++ {
-		var newTimelines []Coord
-		for _, c := range timelines {
-			newTimelines = append(newTimelines, travelToNextRow(lines, c)...)
-		}
-		timelines = newTimelines
+	scores := make(map[Coord]int)
+
+	// pre-populate with last row
+	for i := 0; i < len(lines[0]); i++ {
+		scores[Coord{len(lines) - 1, i}] = 1
 	}
 
-	return len(timelines)
+	// loop backwards from bottom to top, skip bottom row because it was already pre-populated
+	for rowIndex := len(lines) - 2; rowIndex >= 0; rowIndex-- {
+		for i, char := range lines[rowIndex] {
+			coord := Coord{rowIndex, i}
+			if string(char) == "^" {
+				scores[coord] = 0
+				continue
+			}
+
+			score := 0
+			for _, c := range travelToNextRow(lines, coord) {
+				score += scores[c]
+			}
+			scores[coord] = score
+		}
+	}
+
+	startIndex := strings.Index(lines[0], "S")
+	return scores[Coord{0, startIndex}]
 }
