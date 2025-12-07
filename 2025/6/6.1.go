@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -9,6 +8,22 @@ import (
 type MathProblem struct {
 	operation string
 	nums      []int
+}
+
+func solveAddition(problem MathProblem) int {
+	total := 0
+	for _, n := range problem.nums {
+		total += n
+	}
+	return total
+}
+
+func solveMultiplication(problem MathProblem) int {
+	total := 1
+	for _, n := range problem.nums {
+		total *= n
+	}
+	return total
 }
 
 func mapInputToMathProblems(lines [][]string) []MathProblem {
@@ -45,9 +60,14 @@ func cleanLines(lines []string) [][]string {
 }
 
 func algorithm6_1(lines []string) int {
-	problems := mapInputToMathProblems(cleanLines(lines))
-	for _, p := range problems {
-		fmt.Println(p)
+	total := 0
+	for _, p := range mapInputToMathProblems(cleanLines(lines)) {
+		if p.operation == "*" {
+			total += solveMultiplication(p)
+		}
+		if p.operation == "+" {
+			total += solveAddition(p)
+		}
 	}
-	return 0
+	return total
 }
