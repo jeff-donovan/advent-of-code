@@ -43,16 +43,7 @@ func distanceBetweenBoxes(a, b JunctionBox) float64 {
 	return math.Sqrt(float64((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) + (a.z-b.z)*(a.z-b.z)))
 }
 
-func algorithm8_1(lines []string) int {
-	total := 0
-
-	// plan
-	//  - parse the input and get a list of junction boxes
-	//  - make all possible pairs of junction boxes (except for duplicates since the distance is 0)
-	//  - calculate the distance between each pair
-	//  - sort the pairs by distance in ascending order
-
-	junctionBoxes := makeJunctionBoxes(lines)
+func makePairsWithDistances(junctionBoxes []JunctionBox) []PairWithDistance {
 	pairs := make(map[Pair]float64)
 	for _, a := range junctionBoxes {
 		for _, b := range junctionBoxes {
@@ -80,11 +71,26 @@ func algorithm8_1(lines []string) int {
 	for pair, distance := range pairs {
 		pairsWithDistances = append(pairsWithDistances, PairWithDistance{pair.a, pair.b, distance})
 	}
+
 	sort.Slice(pairsWithDistances, func(i, j int) bool {
 		return pairsWithDistances[i].distance < pairsWithDistances[j].distance
 	})
 
-	for _, p := range pairsWithDistances {
+	return pairsWithDistances
+}
+
+func algorithm8_1(lines []string) int {
+	total := 0
+
+	// plan
+	//  - parse the input and get a list of junction boxes
+	//  - make all possible pairs of junction boxes (except for duplicates since the distance is 0)
+	//  - calculate the distance between each pair
+	//  - sort the pairs by distance in ascending order
+
+	junctionBoxes := makeJunctionBoxes(lines)
+
+	for _, p := range makePairsWithDistances(junctionBoxes) {
 		fmt.Printf("%f : (%v, %v)\n", p.distance, p.a, p.b)
 	}
 
