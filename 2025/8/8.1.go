@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -102,6 +103,8 @@ func algorithm8_1(lines []string, numConnections int) int {
 			break
 		}
 
+		connectionsLeft--
+
 		circuitIndexA := -1
 		circuitIndexB := -1
 		for i, c := range circuits {
@@ -115,16 +118,33 @@ func algorithm8_1(lines []string, numConnections int) int {
 			}
 		}
 
-		// both junction boxes are in a circuit, skip
+		// both junction boxes are in a circuit, skip IF we can't combine
 		if circuitIndexA != -1 && circuitIndexB != -1 {
 			if circuitIndexA != circuitIndexB {
-				fmt.Println("JEFF!!! WE NEED TO COMBINE CIRCUITS")
+				fmt.Println("connections left: ", connectionsLeft)
+				fmt.Println("Circuits before: ")
+				for _, c := range circuits {
+					fmt.Println(c)
+				}
+				fmt.Println()
+
+				var newCircuits [][]JunctionBox
+				for i, c := range circuits {
+					if i != circuitIndexA && i != circuitIndexB {
+						newCircuits = append(newCircuits, c)
+					}
+				}
+				newCircuits = append(newCircuits, slices.Concat(circuits[circuitIndexA], circuits[circuitIndexB]))
+				circuits = newCircuits
+
+				fmt.Println("Circuits after: ")
+				for _, c := range circuits {
+					fmt.Println(c)
+				}
+				fmt.Println()
 			}
 			continue
 		}
-
-		// we are going to add them to a circuit
-		connectionsLeft--
 
 		// neither junction box is in a circuit, make a new one
 		if circuitIndexA == -1 && circuitIndexB == -1 {
