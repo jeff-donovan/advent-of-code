@@ -79,9 +79,7 @@ func makePairsWithDistances(junctionBoxes []JunctionBox) []PairWithDistance {
 	return pairsWithDistances
 }
 
-func algorithm8_1(lines []string) int {
-	total := 0
-
+func algorithm8_1(lines []string, numConnections int) int {
 	// plan
 	//  - parse the input and get a list of junction boxes
 	//  - make all possible pairs of junction boxes (except for duplicates since the distance is 0)
@@ -89,10 +87,70 @@ func algorithm8_1(lines []string) int {
 	//  - sort the pairs by distance in ascending order
 
 	junctionBoxes := makeJunctionBoxes(lines)
+	pairs := makePairsWithDistances(junctionBoxes)
 
-	for _, p := range makePairsWithDistances(junctionBoxes) {
-		fmt.Printf("%f : (%v, %v)\n", p.distance, p.a, p.b)
+	// plan
+	//  - number of connections
+	//  - make list of circuits of JunctionBoxes
+	//  - consider if we need to merge circuits together? does that happen?
+
+	connectionsLeft := numConnections
+	var circuits [][]JunctionBox
+
+	for _, p := range pairs {
+		if connectionsLeft == 0 {
+			break
+		}
+
+		circuitIndexA := -1
+		circuitIndexB := -1
+		for i, c := range circuits {
+			for _, jb := range c {
+				if p.a == jb {
+					circuitIndexA = i
+				}
+				if p.b == jb {
+					circuitIndexB = i
+				}
+			}
+		}
+
+		// both junction boxes are in a circuit, skip
+		if circuitIndexA != -1 && circuitIndexB != -1 {
+			if circuitIndexA != circuitIndexB {
+				fmt.Println("JEFF!!! WE NEED TO COMBINE CIRCUITS")
+			}
+			continue
+		}
+
+		// we are going to add them to a circuit
+		connectionsLeft--
+
+		// neither junction box is in a circuit, make a new one
+		if circuitIndexA == -1 && circuitIndexB == -1 {
+			circuits = append(circuits, []JunctionBox{p.a, p.b})
+		}
+
+		if circuitIndexA != -1 {
+			circuits[circuitIndexA] = append(circuits[circuitIndexA], p.b)
+		}
+
+		if circuitIndexB != -1 {
+			circuits[circuitIndexB] = append(circuits[circuitIndexB], p.a)
+		}
 	}
 
-	return total
+	sort.Slice(circuits, func(i, j int) bool {
+		return len(circuits[i]) > len(circuits[j])
+	})
+
+	fmt.Println("Circuit #1: ", circuits[0])
+	fmt.Println("Circuit #2: ", circuits[1])
+	fmt.Println("Circuit #3: ", circuits[2])
+
+	for _, c := range circuits {
+		fmt.Println(len(c), c)
+	}
+
+	return len(circuits[0]) * len(circuits[1]) * len(circuits[2])
 }

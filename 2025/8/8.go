@@ -22,7 +22,8 @@ func main() {
 
 	start := time.Now()
 
-	total := algorithm8_1(lines)
+	numConnections := 10 // TODO: change for test vs. input
+	total := algorithm8_1(lines, numConnections)
 
 	fmt.Println("Answer: ", total)
 
