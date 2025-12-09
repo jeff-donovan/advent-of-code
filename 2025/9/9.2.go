@@ -141,13 +141,27 @@ func makeVerticalRanges(gridWithCoords []string) [][]Coord {
 			col += string(gridWithCoords[y][x])
 		}
 
-		firstPound := strings.Index(col, "#")
+		firstPound := -1
+		for y := 0; y < len(gridWithCoords); y++ {
+			if string(gridWithCoords[y][x]) == "#" {
+				firstPound = y
+				break
+			}
+		}
+
 		if firstPound == -1 {
 			ranges = append(ranges, nil)
 			continue
 		}
 
-		lastPound := strings.LastIndex(col, "#")
+		lastPound := -1
+		for y := len(gridWithCoords) - 1; y >= firstPound; y-- {
+			if string(gridWithCoords[y][x]) == "#" {
+				lastPound = y
+				break
+			}
+		}
+
 		ranges = append(ranges, []Coord{{x, firstPound}, {x, lastPound}})
 	}
 	return ranges
