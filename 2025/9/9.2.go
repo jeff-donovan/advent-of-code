@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func algorithm9_1(lines []string) int {
+func algorithm9_2(lines []string) int {
 	var coords []Coord
 	for _, l := range lines {
 		numStrings := strings.Split(l, ",")
