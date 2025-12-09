@@ -13,10 +13,6 @@ type Coord struct {
 }
 
 func calculateArea(a, b Coord) int {
-	if a.x == b.x || a.y == b.y {
-		return -1
-	}
-
 	answer := (int(math.Abs(float64(a.x-b.x))) + 1) * (int(math.Abs(float64(a.y-b.y))) + 1)
 	fmt.Println("Area: ", answer)
 	return answer
