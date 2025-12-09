@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -16,25 +17,43 @@ func calculateArea(a, b Coord) int {
 		return -1
 	}
 
-	return int(math.Abs(float64(a.x-b.x))) * int(math.Abs(float64(a.y-b.y)))
+	answer := (int(math.Abs(float64(a.x-b.x))) + 1) * (int(math.Abs(float64(a.y-b.y))) + 1)
+	fmt.Println("Area: ", answer)
+	return answer
 }
 
 func algorithm9_1(lines []string) int {
-	total := 0
-
 	var coords []Coord
 	for _, l := range lines {
 		numStrings := strings.Split(l, ",")
 		x, _ := strconv.Atoi(numStrings[0])
 		y, _ := strconv.Atoi(numStrings[1])
+		fmt.Println("x: ", x)
+		fmt.Println("y: ", y)
 		coords = append(coords, Coord{x, y})
+	}
+
+	for _, c := range coords {
+		fmt.Println(c)
 	}
 
 	var areas []int
 	for _, c1 := range coords {
 		for _, c2 := range coords {
+			areas = append(areas, calculateArea(c1, c2))
 		}
 	}
 
-	return total
+	fmt.Println("areas before: ", areas)
+
+	max := 0
+	for _, a := range areas {
+		if a > max {
+			max = a
+		}
+	}
+
+	// fmt.Println("areas after: ", areas)
+
+	return max
 }
