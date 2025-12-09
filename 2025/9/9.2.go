@@ -82,9 +82,15 @@ func drawCoordsAndEdges(grid []string, coords []Coord) []string {
 	var newGrid []string
 	newGrid = append(newGrid, grid...)
 
-	for i := 0; i < len(coords)-1; i++ {
+	for i := 0; i < len(coords); i++ {
 		a := coords[i]
-		b := coords[i+1]
+
+		var b Coord
+		if i+1 == len(coords) {
+			b = coords[0]
+		} else {
+			b = coords[i+1]
+		}
 
 		if isHorizontal(a, b) {
 			newRow := newGrid[a.y]
