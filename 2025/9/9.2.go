@@ -78,17 +78,71 @@ func makeCoordsGrid(coords []Coord) []string {
 	return grid
 }
 
-func makeAllCoordsMap(coords []Coord) map[Coord]struct{} {
-	coordsMap := make(map[Coord]struct{})
-	for i := 0; i < len(coords)-1; i++ {
-		a := coords[i]
-		b := coords[i+1]
-		adjCoords := getAllAdjacentCoords(a, b)
-		for _, c := range adjCoords {
-			coordsMap[c] = struct{}{}
+func drawCoords(grid []string, coords []Coord) []string {
+	var newGrid []string
+	newGrid = append(newGrid, grid...)
+
+	for _, c := range coords {
+		newRow := newGrid[c.y]
+		newRow = newRow[:c.x] + "#" + newRow[c.x+1:]
+		newGrid[c.y] = newRow
+	}
+
+	return newGrid
+}
+
+func drawAllCoords(grid []string, coords []Coord) []string {
+	newGrid := drawCoords(grid, coords)
+
+	// draw all horizontal
+	for y, row := range newGrid {
+		firstPound := strings.Index(row, "#")
+		if firstPound == -1 {
+			continue
+		}
+
+		lastPound := strings.LastIndex(row, "#")
+		newGrid[y] = row[0:firstPound] + strings.Repeat("#", (lastPound-firstPound)+1) + row[lastPound+1:]
+	}
+
+	// draw all vertical
+	for x := 0; x < len(newGrid[0]); x++ {
+		col := ""
+		for y := 0; y < len(newGrid); y++ {
+			col += string(newGrid[y][x])
+		}
+
+		firstPound := strings.Index(col, "#")
+		if firstPound == -1 {
+			continue
+		}
+
+		lastPound := strings.LastIndex(col, "#")
+		for y := firstPound; y <= lastPound; y++ {
+			newGrid[y] = newGrid[y][0:x] + "#" + newGrid[y][x+1:]
 		}
 	}
-	return coordsMap
+
+	// for _, l := range newGrid {
+	// 	fmt.Println(l)
+	// }
+	// // draw all horizontal
+	// // draw all vertical
+
+	// // stop here and test
+	// // fill in
+
+	// coordsMap := make(map[Coord]struct{})
+	// for i := 0; i < len(coords)-1; i++ {
+	// 	a := coords[i]
+	// 	b := coords[i+1]
+	// 	adjCoords := getAllAdjacentCoords(a, b)
+	// 	for _, c := range adjCoords {
+	// 		coordsMap[c] = struct{}{}
+	// 	}
+	// }
+	// return coordsMap
+	return newGrid
 }
 
 func getAllRectangleCoords(a, b Coord) []Coord {
@@ -152,6 +206,7 @@ func algorithm9_2(lines []string) int {
 	// 	fmt.Println(c)
 	// }
 	grid := makeCoordsGrid(coords)
+	grid = drawAllCoords(grid, coords)
 	for _, g := range grid {
 		fmt.Println(g)
 	}
