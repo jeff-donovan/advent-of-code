@@ -298,17 +298,11 @@ func algorithm9_2(lines []string) int {
 	grid = drawCoordsAndEdges(grid, coords)
 	fmt.Println("finished drawing coords AND edges on grid")
 
-	fmt.Println("horizontal ranges:")
 	horizontalRanges := makeHorizontalRanges(grid)
-	for _, r := range horizontalRanges {
-		fmt.Println(r)
-	}
-	fmt.Println()
-	fmt.Println("vertical ranges")
+	fmt.Println("finished making horizontal ranges")
+
 	verticalRanges := makeVerticalRanges(grid)
-	for _, r := range verticalRanges {
-		fmt.Println(r)
-	}
+	fmt.Println("finished making vertical ranges")
 
 	// // now we need to add in the outer Xs so that we fill in the remaining ranges
 	// grid = drawRanges(grid, horizontalRanges, verticalRanges)
