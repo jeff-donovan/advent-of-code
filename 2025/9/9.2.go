@@ -81,8 +81,45 @@ func makeAllCoordsMap(coords []Coord) map[Coord]struct{} {
 	return coordsMap
 }
 
+func getAllRectangleCoords(a, b Coord) []Coord {
+	minX := a.x
+	if b.x < minX {
+		minX = b.x
+	}
+
+	maxX := a.x
+	if b.x > maxX {
+		maxX = b.x
+	}
+
+	minY := a.y
+	if b.y < minY {
+		minY = b.y
+	}
+
+	maxY := a.y
+	if b.y > maxY {
+		maxY = b.y
+	}
+
+	var coords []Coord
+	for x := minX; x <= maxX; x++ {
+		for y := minY; y <= maxY; y++ {
+			coords = append(coords, Coord{x, y})
+		}
+	}
+	return coords
+}
+
 func isValidRectangle(coordsMap map[Coord]struct{}, a, b Coord) bool {
-	return false
+	rectangleCoords := getAllRectangleCoords(a, b)
+	for _, c := range rectangleCoords {
+		_, exists := coordsMap[c]
+		if !exists {
+			return false
+		}
+	}
+	return true
 }
 
 func algorithm9_2(lines []string) int {
@@ -101,6 +138,9 @@ func algorithm9_2(lines []string) int {
 	}
 
 	coordsMap := makeAllCoordsMap(coords)
+	for c, _ := range coordsMap {
+		fmt.Println(c)
+	}
 
 	var areas []int
 	for _, c1 := range coords {
