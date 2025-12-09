@@ -181,16 +181,13 @@ func algorithm9_2(lines []string) int {
 		y, _ := strconv.Atoi(numStrings[1])
 		coords = append(coords, Coord{x, y})
 	}
+	fmt.Println("finished making coords")
 
-	// coordsMap := makeAllCoordsMap(coords)
-	// for c, _ := range coordsMap {
-	// 	fmt.Println(c)
-	// }
 	grid := makeCoordsGrid(coords)
+	fmt.Println("finished making grid")
+
 	grid = drawAllCoords(grid, coords)
-	for _, g := range grid {
-		fmt.Println(g)
-	}
+	fmt.Println("finished drawing all coords")
 
 	var areas []int
 	for _, c1 := range coords {
@@ -201,16 +198,12 @@ func algorithm9_2(lines []string) int {
 		}
 	}
 
-	fmt.Println("areas before: ", areas)
-
 	max := 0
 	for _, a := range areas {
 		if a > max {
 			max = a
 		}
 	}
-
-	// fmt.Println("areas after: ", areas)
 
 	return max
 }
