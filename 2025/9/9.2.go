@@ -136,14 +136,9 @@ func makeVerticalRanges(gridWithCoords []string) [][]Coord {
 	var ranges [][]Coord
 	// draw all vertical
 	for x := 0; x < len(gridWithCoords[0]); x++ {
-		col := ""
-		for y := 0; y < len(gridWithCoords); y++ {
-			col += string(gridWithCoords[y][x])
-		}
-
 		firstPound := -1
 		for y := 0; y < len(gridWithCoords); y++ {
-			if string(gridWithCoords[y][x]) == "#" {
+			if gridWithCoords[y][x] == '#' {
 				firstPound = y
 				break
 			}
@@ -156,7 +151,7 @@ func makeVerticalRanges(gridWithCoords []string) [][]Coord {
 
 		lastPound := -1
 		for y := len(gridWithCoords) - 1; y >= firstPound; y-- {
-			if string(gridWithCoords[y][x]) == "#" {
+			if gridWithCoords[y][x] == '#' {
 				lastPound = y
 				break
 			}
