@@ -78,17 +78,42 @@ func makeCoordsGrid(coords []Coord) []string {
 	return grid
 }
 
-func drawCoords(grid []string, coords []Coord) []string {
+func drawCoordsAndEdges(grid []string, coords []Coord) []string {
 	var newGrid []string
 	newGrid = append(newGrid, grid...)
 
-	for _, c := range coords {
-		newRow := newGrid[c.y]
-		newRow = newRow[:c.x] + "#" + newRow[c.x+1:]
-		newGrid[c.y] = newRow
+	for i := 0; i < len(coords)-1; i++ {
+		a := coords[i]
+		b := coords[i+1]
+
+		if isHorizontal(a, b) {
+			newRow := newGrid[a.y]
+			minX := min(a.x, b.x)
+			maxX := max(a.x, b.x)
+			newRow = newRow[:minX] + strings.Repeat("#", (maxX-minX)+1) + newRow[maxX+1:]
+			newGrid[a.y] = newRow
+		}
+
+		if isVertical(a, b) {
+			minY := min(a.y, b.y)
+			maxY := max(a.y, b.y)
+			for y := minY; y <= maxY; y++ {
+				newRow := newGrid[y]
+				newRow = newRow[:a.x] + "#" + newRow[a.x+1:]
+				newGrid[y] = newRow
+			}
+		}
 	}
 
 	return newGrid
+}
+
+func isHorizontal(a, b Coord) bool {
+	return a.y == b.y
+}
+
+func isVertical(a, b Coord) bool {
+	return a.x == b.x
 }
 
 func makeHorizontalRanges(gridWithCoords []string) [][]Coord {
@@ -156,40 +181,40 @@ func areVerticalsInRange(verticalRanges [][]Coord, a, b Coord) bool {
 	return isRightInRange
 }
 
-func drawAllCoords(grid []string, coords []Coord) []string {
-	newGrid := drawCoords(grid, coords)
+// func drawAllCoords(grid []string, coords []Coord) []string {
+// 	newGrid := drawCoords(grid, coords)
 
-	// draw all horizontal
-	for y, row := range newGrid {
-		firstPound := strings.Index(row, "#")
-		if firstPound == -1 {
-			continue
-		}
+// 	// draw all horizontal
+// 	for y, row := range newGrid {
+// 		firstPound := strings.Index(row, "#")
+// 		if firstPound == -1 {
+// 			continue
+// 		}
 
-		lastPound := strings.LastIndex(row, "#")
-		newGrid[y] = row[0:firstPound] + strings.Repeat("#", (lastPound-firstPound)+1) + row[lastPound+1:]
-	}
+// 		lastPound := strings.LastIndex(row, "#")
+// 		newGrid[y] = row[0:firstPound] + strings.Repeat("#", (lastPound-firstPound)+1) + row[lastPound+1:]
+// 	}
 
-	// draw all vertical
-	for x := 0; x < len(newGrid[0]); x++ {
-		col := ""
-		for y := 0; y < len(newGrid); y++ {
-			col += string(newGrid[y][x])
-		}
+// 	// draw all vertical
+// 	for x := 0; x < len(newGrid[0]); x++ {
+// 		col := ""
+// 		for y := 0; y < len(newGrid); y++ {
+// 			col += string(newGrid[y][x])
+// 		}
 
-		firstPound := strings.Index(col, "#")
-		if firstPound == -1 {
-			continue
-		}
+// 		firstPound := strings.Index(col, "#")
+// 		if firstPound == -1 {
+// 			continue
+// 		}
 
-		lastPound := strings.LastIndex(col, "#")
-		for y := firstPound; y <= lastPound; y++ {
-			newGrid[y] = newGrid[y][0:x] + "#" + newGrid[y][x+1:]
-		}
-	}
+// 		lastPound := strings.LastIndex(col, "#")
+// 		for y := firstPound; y <= lastPound; y++ {
+// 			newGrid[y] = newGrid[y][0:x] + "#" + newGrid[y][x+1:]
+// 		}
+// 	}
 
-	return newGrid
-}
+// 	return newGrid
+// }
 
 func getRectangleHorizontalRanges(a, b Coord) [][]Coord {
 	top := []Coord{{a.x, a.y}, {b.x, a.y}}
@@ -256,8 +281,8 @@ func algorithm9_2(lines []string) int {
 	grid := makeCoordsGrid(coords)
 	fmt.Println("finished making grid")
 
-	grid = drawCoords(grid, coords)
-	fmt.Println("finished drawing coords on grid")
+	grid = drawCoordsAndEdges(grid, coords)
+	fmt.Println("finished drawing coords AND edges on grid")
 
 	fmt.Println("horizontal ranges:")
 	horizontalRanges := makeHorizontalRanges(grid)
