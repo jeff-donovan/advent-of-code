@@ -91,6 +91,71 @@ func drawCoords(grid []string, coords []Coord) []string {
 	return newGrid
 }
 
+func makeHorizontalRanges(gridWithCoords []string) [][]Coord {
+	var ranges [][]Coord
+	// draw all horizontal
+	for y, row := range gridWithCoords {
+		firstPound := strings.Index(row, "#")
+		if firstPound == -1 {
+			ranges = append(ranges, nil)
+			continue
+		}
+
+		lastPound := strings.LastIndex(row, "#")
+		ranges = append(ranges, []Coord{{firstPound, y}, {lastPound, y}})
+	}
+	return ranges
+}
+
+func makeVerticalRanges(gridWithCoords []string) [][]Coord {
+	var ranges [][]Coord
+	// draw all vertical
+	for x := 0; x < len(gridWithCoords[0]); x++ {
+		col := ""
+		for y := 0; y < len(gridWithCoords); y++ {
+			col += string(gridWithCoords[y][x])
+		}
+
+		firstPound := strings.Index(col, "#")
+		if firstPound == -1 {
+			ranges = append(ranges, nil)
+			continue
+		}
+
+		lastPound := strings.LastIndex(col, "#")
+		ranges = append(ranges, []Coord{{x, firstPound}, {x, lastPound}})
+	}
+	return ranges
+}
+
+func areHorizontalsInRange(horizontalRanges [][]Coord, a, b Coord) bool {
+	// top := []Coord{{a.x, a.y}, {b.x, a.y}}
+	ayRange := horizontalRanges[a.y]
+	isTopInRange := ayRange[0].x <= a.x && a.x <= ayRange[1].x && ayRange[0].x <= b.x && b.x <= ayRange[1].x
+	if !isTopInRange {
+		return false
+	}
+
+	// bottom := []Coord{{a.x, b.y}, {b.x, b.y}}
+	byRange := horizontalRanges[b.y]
+	isBottomInRange := byRange[0].x <= a.x && a.x <= byRange[1].x && byRange[0].x <= b.x && b.x <= byRange[1].x
+	return isBottomInRange
+}
+
+func areVerticalsInRange(verticalRanges [][]Coord, a, b Coord) bool {
+	// left := []Coord{{a.x, a.y}, {a.x, b.y}}
+	axRange := verticalRanges[a.x]
+	isLeftInRange := axRange[0].y <= a.y && a.y <= axRange[1].y && axRange[0].y <= b.y && b.y <= axRange[1].y
+	if !isLeftInRange {
+		return false
+	}
+
+	// right := []Coord{{b.x, a.y}, {b.x, b.y}}
+	bxRange := verticalRanges[b.x]
+	isRightInRange := bxRange[0].y <= a.y && a.y <= bxRange[1].y && bxRange[0].y <= b.y && b.y <= bxRange[1].y
+	return isRightInRange
+}
+
 func drawAllCoords(grid []string, coords []Coord) []string {
 	newGrid := drawCoords(grid, coords)
 
@@ -126,6 +191,18 @@ func drawAllCoords(grid []string, coords []Coord) []string {
 	return newGrid
 }
 
+func getRectangleHorizontalRanges(a, b Coord) [][]Coord {
+	top := []Coord{{a.x, a.y}, {b.x, a.y}}
+	bottom := []Coord{{a.x, b.y}, {b.x, b.y}}
+	return [][]Coord{top, bottom}
+}
+
+func getRectangleVerticalRanges(a, b Coord) [][]Coord {
+	left := []Coord{{a.x, a.y}, {a.x, b.y}}
+	right := []Coord{{b.x, a.y}, {b.x, b.y}}
+	return [][]Coord{left, right}
+}
+
 func getAllRectangleCoords(a, b Coord) []Coord {
 	minX := a.x
 	if b.x < minX {
@@ -156,15 +233,8 @@ func getAllRectangleCoords(a, b Coord) []Coord {
 	return coords
 }
 
-func isValidRectangle(grid []string, a, b Coord) bool {
-	rectangleCoords := getAllRectangleCoords(a, b)
-	for _, c := range rectangleCoords {
-		exists := string(grid[c.y][c.x]) == "#"
-		if !exists {
-			return false
-		}
-	}
-	return true
+func isValidRectangle(horizontalRanges [][]Coord, verticalRanges [][]Coord, a, b Coord) bool {
+	return areHorizontalsInRange(horizontalRanges, a, b) && areVerticalsInRange(verticalRanges, a, b)
 }
 
 func algorithm9_2(lines []string) int {
@@ -186,24 +256,45 @@ func algorithm9_2(lines []string) int {
 	grid := makeCoordsGrid(coords)
 	fmt.Println("finished making grid")
 
-	grid = drawAllCoords(grid, coords)
-	fmt.Println("finished drawing all coords")
+	grid = drawCoords(grid, coords)
+	fmt.Println("finished drawing coords on grid")
 
-	var areas []int
+	fmt.Println("horizontal ranges:")
+	horizontalRanges := makeHorizontalRanges(grid)
+	for _, r := range horizontalRanges {
+		fmt.Println(r)
+	}
+	fmt.Println()
+	fmt.Println("vertical ranges")
+	verticalRanges := makeVerticalRanges(grid)
+	for _, r := range verticalRanges {
+		fmt.Println(r)
+	}
+
+	// // now we need to add in the outer Xs so that we fill in the remaining ranges
+	// grid = drawRanges(grid, horizontalRanges, verticalRanges)
+	// horizontalRanges = makeHorizontalRanges(grid)
+	// verticalRanges = makeVerticalRanges(grid)
+
+	max := 0
 	for _, c1 := range coords {
 		for _, c2 := range coords {
-			if isValidRectangle(grid, c1, c2) {
-				areas = append(areas, calculateArea(c1, c2))
+			if isValidRectangle(horizontalRanges, verticalRanges, c1, c2) {
+				area := calculateArea(c1, c2)
+				if area > max {
+					max = area
+				}
 			}
 		}
 	}
 
-	max := 0
-	for _, a := range areas {
-		if a > max {
-			max = a
-		}
-	}
+	// max := 0
+	// for _, a := range areas {
+	// 	if a > max {
+	// 		max = a
+	// 	}
+	// }
 
 	return max
+	// return 0
 }
