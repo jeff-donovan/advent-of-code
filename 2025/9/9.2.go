@@ -293,36 +293,41 @@ func algorithm9_2(lines []string) int {
 	grid = drawCoordsAndEdges(grid, coords)
 	fmt.Println("finished drawing coords AND edges on grid")
 
-	horizontalRanges := makeHorizontalRanges(grid)
-	fmt.Println("finished making horizontal ranges")
-
-	verticalRanges := makeVerticalRanges(grid)
-	fmt.Println("finished making vertical ranges")
-
-	// // now we need to add in the outer Xs so that we fill in the remaining ranges
-	// grid = drawRanges(grid, horizontalRanges, verticalRanges)
-	// horizontalRanges = makeHorizontalRanges(grid)
-	// verticalRanges = makeVerticalRanges(grid)
-
-	max := 0
-	for _, c1 := range coords {
-		for _, c2 := range coords {
-			if isValidRectangle(horizontalRanges, verticalRanges, c1, c2) {
-				area := calculateArea(c1, c2)
-				if area > max {
-					max = area
-				}
-			}
-		}
+	fmt.Println()
+	for _, line := range grid {
+		fmt.Println(line)
 	}
 
+	// horizontalRanges := makeHorizontalRanges(grid)
+	// fmt.Println("finished making horizontal ranges")
+
+	// verticalRanges := makeVerticalRanges(grid)
+	// fmt.Println("finished making vertical ranges")
+
+	// // // now we need to add in the outer Xs so that we fill in the remaining ranges
+	// // grid = drawRanges(grid, horizontalRanges, verticalRanges)
+	// // horizontalRanges = makeHorizontalRanges(grid)
+	// // verticalRanges = makeVerticalRanges(grid)
+
 	// max := 0
-	// for _, a := range areas {
-	// 	if a > max {
-	// 		max = a
+	// for _, c1 := range coords {
+	// 	for _, c2 := range coords {
+	// 		if isValidRectangle(horizontalRanges, verticalRanges, c1, c2) {
+	// 			area := calculateArea(c1, c2)
+	// 			if area > max {
+	// 				max = area
+	// 			}
+	// 		}
 	// 	}
 	// }
 
-	return max
-	// return 0
+	// // max := 0
+	// // for _, a := range areas {
+	// // 	if a > max {
+	// // 		max = a
+	// // 	}
+	// // }
+
+	// return max
+	return 0
 }
