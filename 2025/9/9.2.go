@@ -123,25 +123,6 @@ func drawAllCoords(grid []string, coords []Coord) []string {
 		}
 	}
 
-	// for _, l := range newGrid {
-	// 	fmt.Println(l)
-	// }
-	// // draw all horizontal
-	// // draw all vertical
-
-	// // stop here and test
-	// // fill in
-
-	// coordsMap := make(map[Coord]struct{})
-	// for i := 0; i < len(coords)-1; i++ {
-	// 	a := coords[i]
-	// 	b := coords[i+1]
-	// 	adjCoords := getAllAdjacentCoords(a, b)
-	// 	for _, c := range adjCoords {
-	// 		coordsMap[c] = struct{}{}
-	// 	}
-	// }
-	// return coordsMap
 	return newGrid
 }
 
@@ -175,10 +156,10 @@ func getAllRectangleCoords(a, b Coord) []Coord {
 	return coords
 }
 
-func isValidRectangle(coordsMap map[Coord]struct{}, a, b Coord) bool {
+func isValidRectangle(grid []string, a, b Coord) bool {
 	rectangleCoords := getAllRectangleCoords(a, b)
 	for _, c := range rectangleCoords {
-		_, exists := coordsMap[c]
+		exists := string(grid[c.y][c.x]) == "#"
 		if !exists {
 			return false
 		}
@@ -211,27 +192,25 @@ func algorithm9_2(lines []string) int {
 		fmt.Println(g)
 	}
 
-	// var areas []int
-	// for _, c1 := range coords {
-	// 	for _, c2 := range coords {
-	// 		if isValidRectangle(coordsMap, c1, c2) {
-	// 			areas = append(areas, calculateArea(c1, c2))
-	// 		}
-	// 	}
-	// }
+	var areas []int
+	for _, c1 := range coords {
+		for _, c2 := range coords {
+			if isValidRectangle(grid, c1, c2) {
+				areas = append(areas, calculateArea(c1, c2))
+			}
+		}
+	}
 
-	// fmt.Println("areas before: ", areas)
+	fmt.Println("areas before: ", areas)
 
-	// max := 0
-	// for _, a := range areas {
-	// 	if a > max {
-	// 		max = a
-	// 	}
-	// }
+	max := 0
+	for _, a := range areas {
+		if a > max {
+			max = a
+		}
+	}
 
-	// // fmt.Println("areas after: ", areas)
+	// fmt.Println("areas after: ", areas)
 
-	// return max
-
-	return 0
+	return max
 }
