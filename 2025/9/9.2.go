@@ -2,19 +2,18 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"strings"
 )
 
-func calculateMinX(coords []Coord) int {
-	min := math.MaxInt
+func calculateMaxX(coords []Coord) int {
+	max := 0
 	for _, c := range coords {
-		if c.x < min {
-			min = c.x
+		if c.x > max {
+			max = c.x
 		}
 	}
-	return min
+	return max
 }
 
 func calculatemaxY(coords []Coord) int {
@@ -66,6 +65,17 @@ func getAllAdjacentCoords(a, b Coord) []Coord {
 		coords = append(coords, Coord{x, a.y})
 	}
 	return coords
+}
+
+func makeCoordsGrid(coords []Coord) []string {
+	maxX := calculateMaxX(coords)
+	maxY := calculatemaxY(coords)
+
+	var grid []string
+	for y := 0; y <= maxY; y++ {
+		grid = append(grid, strings.Repeat(".", maxX+1))
+	}
+	return grid
 }
 
 func makeAllCoordsMap(coords []Coord) map[Coord]struct{} {
@@ -125,7 +135,7 @@ func isValidRectangle(coordsMap map[Coord]struct{}, a, b Coord) bool {
 func algorithm9_2(lines []string) int {
 	// plan
 	//  - get all coords
-	//  - make the coords map
+	//  - draw the coords grid
 	//  - figure out how to define a "valid" rectangle
 	//  - loop through and only add the valid rectangle areas
 
@@ -137,30 +147,36 @@ func algorithm9_2(lines []string) int {
 		coords = append(coords, Coord{x, y})
 	}
 
-	coordsMap := makeAllCoordsMap(coords)
-	for c, _ := range coordsMap {
-		fmt.Println(c)
+	// coordsMap := makeAllCoordsMap(coords)
+	// for c, _ := range coordsMap {
+	// 	fmt.Println(c)
+	// }
+	grid := makeCoordsGrid(coords)
+	for _, g := range grid {
+		fmt.Println(g)
 	}
 
-	var areas []int
-	for _, c1 := range coords {
-		for _, c2 := range coords {
-			if isValidRectangle(coordsMap, c1, c2) {
-				areas = append(areas, calculateArea(c1, c2))
-			}
-		}
-	}
+	// var areas []int
+	// for _, c1 := range coords {
+	// 	for _, c2 := range coords {
+	// 		if isValidRectangle(coordsMap, c1, c2) {
+	// 			areas = append(areas, calculateArea(c1, c2))
+	// 		}
+	// 	}
+	// }
 
-	fmt.Println("areas before: ", areas)
+	// fmt.Println("areas before: ", areas)
 
-	max := 0
-	for _, a := range areas {
-		if a > max {
-			max = a
-		}
-	}
+	// max := 0
+	// for _, a := range areas {
+	// 	if a > max {
+	// 		max = a
+	// 	}
+	// }
 
-	// fmt.Println("areas after: ", areas)
+	// // fmt.Println("areas after: ", areas)
 
-	return max
+	// return max
+
+	return 0
 }
