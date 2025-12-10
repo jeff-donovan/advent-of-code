@@ -10,9 +10,10 @@ import (
 )
 
 type Machine struct {
-	diagram      IndicatorLightDiagram
-	buttons      []Button
-	requirements JoltageRequirement
+	diagram             IndicatorLightDiagram
+	buttons             []Button
+	requirements        JoltageRequirement
+	isImpossiblePathMap map[string]struct{}
 }
 
 type IndicatorLightDiagram []bool
@@ -90,7 +91,7 @@ func makeMachines(lines []string) []Machine {
 	var machines []Machine
 
 	for _, l := range lines {
-		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l)})
+		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l), make(map[string]struct{})})
 	}
 
 	return machines

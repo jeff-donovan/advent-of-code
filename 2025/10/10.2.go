@@ -3,13 +3,18 @@ package main
 import (
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
 )
 
-func calculateFewestButtonClicksForJoltageRequirements(machine Machine, currentJoltage JoltageRequirement) int {
+func calculateFewestButtonClicksForJoltageRequirements(machine *Machine, currentJoltage JoltageRequirement) int {
 	// set up initial joltagereq
 	// call calculateFewestButtonClicksRemaining
 
-	// check right now if isImpossiblePath
+	// // check right now if isImpossiblePath
+	// if isImpossiblePath(machine, currentJoltage) {
+	// 	return math.MaxInt
+	// }
 
 	stack := []JoltageRequirement{currentJoltage}
 	n := 1
@@ -25,7 +30,7 @@ func calculateFewestButtonClicksForJoltageRequirements(machine Machine, currentJ
 					return n
 				}
 
-				if isImpossiblePath(machine.requirements, nextReq) {
+				if isImpossiblePath(machine, nextReq) {
 					continue
 				}
 
@@ -37,13 +42,13 @@ func calculateFewestButtonClicksForJoltageRequirements(machine Machine, currentJ
 	}
 }
 
-func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequirement) int {
+func calculateFewestButtonClicksRemaining(machine *Machine, current JoltageRequirement) int {
 	// fmt.Println("current: ", current)
 	if areRequirementsEqual(machine.requirements, current) {
 		return 0
 	}
 
-	if isImpossiblePath(machine.requirements, current) {
+	if isImpossiblePath(machine, current) {
 		return math.MaxInt
 	}
 
@@ -93,18 +98,33 @@ func makeEndResultJoltageRequirements(machine Machine, clicks []Button) JoltageR
 	return generatedRequirements
 }
 
-func isImpossiblePath(req JoltageRequirement, current JoltageRequirement) bool {
-	if len(req) != len(current) {
+func isImpossiblePath(machine *Machine, current JoltageRequirement) bool {
+	key := makeJoltageReqKey(current)
+	_, exists := machine.isImpossiblePathMap[key]
+	if exists {
+		return true
+	}
+
+	if len(machine.requirements) != len(current) {
 		panic("unexpectedly different lengths!")
 	}
 
-	for i := range req {
-		if current[i] > req[i] {
+	for i := range machine.requirements {
+		if current[i] > machine.requirements[i] {
+			machine.isImpossiblePathMap[key] = struct{}{}
 			return true
 		}
 	}
 
 	return false
+}
+
+func makeJoltageReqKey(req JoltageRequirement) string {
+	var reqsAsStrings []string
+	for _, val := range req {
+		reqsAsStrings = append(reqsAsStrings, strconv.Itoa(val))
+	}
+	return strings.Join(reqsAsStrings, ",")
 }
 
 func areRequirementsEqual(a, b JoltageRequirement) bool {
@@ -132,7 +152,7 @@ func algorithm10_2(lines []string) int {
 			initialJoltage = append(initialJoltage, 0)
 		}
 
-		total += calculateFewestButtonClicksForJoltageRequirements(m, initialJoltage)
+		total += calculateFewestButtonClicksForJoltageRequirements(&m, initialJoltage)
 		fmt.Println("calculated min button clicks for machine ", i)
 		// fmt.Println(m)
 	}
