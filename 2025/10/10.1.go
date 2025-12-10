@@ -12,7 +12,7 @@ type Machine struct {
 	// joltageRequirements
 }
 
-type IndicatorLightDiagram string
+type IndicatorLightDiagram []bool
 
 type Button []int
 
@@ -27,9 +27,21 @@ func makeMachines(lines []string) []Machine {
 }
 
 func makeDiagram(line string) IndicatorLightDiagram {
+	var diagram []bool
+
 	leftBracket := strings.Index(line, "[")
 	rightBracket := strings.Index(line, "]")
-	return IndicatorLightDiagram(line[leftBracket+1 : rightBracket])
+	diagramString := line[leftBracket+1 : rightBracket]
+	for _, c := range diagramString {
+		if c == '.' {
+			diagram = append(diagram, false)
+		}
+		if c == '#' {
+			diagram = append(diagram, true)
+		}
+	}
+
+	return diagram
 }
 
 func makeButtons(line string) []Button {
