@@ -32,6 +32,13 @@ func TestCalculateFewestButtonClicksRemaining(t *testing.T) {
 			current: JoltageRequirement{0},
 			want:    1,
 		},
+
+		{
+			name:    "1 when second button click will produce machine requirements",
+			machine: Machine{nil, []Button{{0}, {1}}, JoltageRequirement{0, 1}},
+			current: JoltageRequirement{0, 0},
+			want:    1,
+		},
 	}
 
 	for _, tc := range tests {
