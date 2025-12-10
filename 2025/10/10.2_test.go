@@ -15,6 +15,20 @@ func TestIsImpossiblePath(t *testing.T) {
 			current: JoltageRequirement{1},
 			want:    true,
 		},
+
+		{
+			name:    "possible - all values in current are less than or equal to corresponding value in req",
+			req:     JoltageRequirement{0},
+			current: JoltageRequirement{0},
+			want:    false,
+		},
+
+		{
+			name:    "possible - JoltageRequirement of length > 1 - all values in current are less than or equal to corresponding value in req",
+			req:     JoltageRequirement{0, 1},
+			current: JoltageRequirement{0, 0},
+			want:    false,
+		},
 	}
 
 	for _, tc := range tests {
