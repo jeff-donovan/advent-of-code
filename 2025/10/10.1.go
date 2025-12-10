@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -15,6 +16,36 @@ type Machine struct {
 type IndicatorLightDiagram []bool
 
 type Button []int
+
+func calculateFewestButtonClicks(machine Machine) int {
+	for n := 1; n <= 3; n++ {
+		permutations := generatePermutations(machine.buttons, n)
+		for _, p := range permutations {
+			fmt.Println(p)
+		}
+	}
+	return 0
+}
+
+func generatePermutations(buttons []Button, n int) [][]Button {
+	var permutations [][]Button
+	if n == 1 {
+		for _, b := range buttons {
+			permutations = append(permutations, []Button{b})
+		}
+		return permutations
+	}
+
+	previousPermutations := generatePermutations(buttons, n-1)
+	for _, p := range previousPermutations {
+		for _, b := range buttons {
+			newPermutation := slices.Concat(p, []Button{b})
+			permutations = append(permutations, newPermutation)
+		}
+	}
+
+	return permutations
+}
 
 func makeMachines(lines []string) []Machine {
 	var machines []Machine
@@ -74,6 +105,9 @@ func algorithm10_1(lines []string) int {
 	for _, m := range machines {
 		fmt.Println(m)
 	}
+
+	machine := machines[0]
+	calculateFewestButtonClicks(machine)
 
 	return total
 }
