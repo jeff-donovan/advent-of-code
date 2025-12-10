@@ -129,11 +129,11 @@ func algorithm10_2(lines []string) int {
 	total := 0
 
 	machines := makeMachines(lines)
-	// for _, m := range machines {
-	// 	total += calculateFewestButtonClicksForJoltageRequirements(m)
-	// 	// fmt.Println(m)
-	// }
-	fmt.Println("min: ", calculateFewestButtonClicksForJoltageRequirements(machines[0]))
+	for _, m := range machines {
+		total += calculateFewestButtonClicksForJoltageRequirements(m)
+		// fmt.Println(m)
+	}
+	// fmt.Println("min: ", calculateFewestButtonClicksForJoltageRequirements(machines[0]))
 	// fmt.Println("equal? ", areRequirementsEqual(machines[0].requirements, JoltageRequirement{3, 5, 4, 7}))
 
 	// m := machines[0]
