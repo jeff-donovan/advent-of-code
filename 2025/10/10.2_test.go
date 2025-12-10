@@ -2,6 +2,31 @@ package main
 
 import "testing"
 
+func TestIsImpossiblePath(t *testing.T) {
+	tests := []struct {
+		name    string
+		req     JoltageRequirement
+		current JoltageRequirement
+		want    bool
+	}{
+		{
+			name:    "impossible - at least one value in current is greater than corresponding value in req",
+			req:     JoltageRequirement{0},
+			current: JoltageRequirement{1},
+			want:    true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := isImpossiblePath(tc.req, tc.current)
+			if got != tc.want {
+				t.Fatalf("isImpossiblePath(%v, %v) = %v, want %v", tc.req, tc.current, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestAreRequirementsEqual(t *testing.T) {
 	tests := []struct {
 		name string
