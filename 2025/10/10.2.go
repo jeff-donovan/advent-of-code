@@ -13,6 +13,10 @@ func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, 
 		return n
 	}
 
+	if n > machine.minVal {
+		return math.MaxInt
+	}
+
 	if isImpossiblePath(machine, currentJoltage) {
 		return math.MaxInt
 	}
@@ -31,10 +35,12 @@ func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, 
 		}
 	}
 
-	if minVal == math.MaxInt {
+	if minVal == math.MaxInt || minVal > machine.minVal {
 		addJoltageRequirementToImpossibleMap(machine, currentJoltage)
+		return math.MaxInt
 	}
 
+	machine.minVal = minVal
 	return minVal
 }
 

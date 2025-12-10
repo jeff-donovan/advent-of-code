@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"slices"
 	"strconv"
@@ -14,6 +15,7 @@ type Machine struct {
 	buttons             []Button
 	requirements        JoltageRequirement
 	isImpossiblePathMap map[string]struct{}
+	minVal              int
 }
 
 type IndicatorLightDiagram []bool
@@ -91,7 +93,7 @@ func makeMachines(lines []string) []Machine {
 	var machines []Machine
 
 	for _, l := range lines {
-		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l), make(map[string]struct{})})
+		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l), make(map[string]struct{}), math.MaxInt})
 	}
 
 	return machines
