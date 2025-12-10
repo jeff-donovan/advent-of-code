@@ -18,35 +18,44 @@ type IndicatorLightDiagram []bool
 type Button []int
 
 func calculateFewestButtonClicks(machine Machine) int {
-	for n := 1; n <= 3; n++ {
+	n := 1
+	for {
 		permutations := generatePermutations(machine.buttons, n)
 		for _, p := range permutations {
-			fmt.Println(p)
+			result := makeEndResult(machine, p)
+			if areDiagramsEqual(machine.diagram, result) {
+				return n
+			}
 		}
+		n++
 	}
-	return 0
 }
 
 func makeEndResult(machine Machine, clicks []Button) IndicatorLightDiagram {
+	// TODO: add memoization
 	generatedDiagram := make(IndicatorLightDiagram, len(machine.diagram))
+	// fmt.Println("generatedDiagram before: ", generatedDiagram)
+	// fmt.Println("clicks: ", clicks)
 	for _, click := range clicks {
 		for _, i := range click {
 			generatedDiagram[i] = !generatedDiagram[i]
 		}
 	}
+	// fmt.Println("generatedDiagram after: ", generatedDiagram)
 	return generatedDiagram
 }
 
 func areDiagramsEqual(a, b IndicatorLightDiagram) bool {
 	if len(a) != len(b) {
+		fmt.Println("unexpectedly different lengths!")
 		return false
 	}
 
-	for _, avalue := range a {
-		for _, bvalue := range b {
-			if avalue != bvalue {
-				return false
-			}
+	for i, _ := range a {
+		aValue := a[i]
+		bValue := b[i]
+		if aValue != bValue {
+			return false
 		}
 	}
 
@@ -129,11 +138,12 @@ func algorithm10_1(lines []string) int {
 
 	machines := makeMachines(lines)
 	for _, m := range machines {
-		fmt.Println(m)
+		total += calculateFewestButtonClicks(m)
 	}
 
-	machine := machines[0]
-	calculateFewestButtonClicks(machine)
+	// machine := machines[0]
+	// result := calculateFewestButtonClicks(machine)
+	// fmt.Println("machine 0: ", result)
 
 	return total
 }
