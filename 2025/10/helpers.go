@@ -10,14 +10,16 @@ import (
 )
 
 type Machine struct {
-	diagram IndicatorLightDiagram
-	buttons []Button
-	// joltageRequirements
+	diagram      IndicatorLightDiagram
+	buttons      []Button
+	requirements JoltageRequirement
 }
 
 type IndicatorLightDiagram []bool
 
 type Button []int
+
+type JoltageRequirement []int
 
 func calculateFewestButtonClicks(machine Machine) int {
 	n := 1
@@ -88,7 +90,7 @@ func makeMachines(lines []string) []Machine {
 	var machines []Machine
 
 	for _, l := range lines {
-		machines = append(machines, Machine{makeDiagram(l), makeButtons(l)})
+		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l)})
 	}
 
 	return machines
@@ -133,6 +135,21 @@ func makeButtons(line string) []Button {
 	}
 
 	return buttons
+}
+
+func makeJoltageRequirements(line string) JoltageRequirement {
+	var requirements []int
+
+	leftCurlyBrace := strings.Index(line, "{")
+	rightCurlyBrace := strings.Index(line, "}")
+	reqString := line[leftCurlyBrace+1 : rightCurlyBrace]
+
+	for _, char := range reqString {
+		req, _ := strconv.Atoi(string(char))
+		requirements = append(requirements, req)
+	}
+
+	return requirements
 }
 
 func parseInput(f *os.File) ([]string, error) {

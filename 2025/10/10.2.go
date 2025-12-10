@@ -1,11 +1,13 @@
 package main
 
+import "fmt"
+
 func algorithm10_2(lines []string) int {
 	total := 0
 
 	machines := makeMachines(lines)
 	for _, m := range machines {
-		total += calculateFewestButtonClicks(m)
+		fmt.Println(m)
 	}
 
 	// machine := machines[0]
