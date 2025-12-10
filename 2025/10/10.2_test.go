@@ -15,6 +15,20 @@ func TestMakeNextJoltageRequirement(t *testing.T) {
 			click:   nil,
 			want:    JoltageRequirement{0, 1, 2, 3},
 		},
+
+		{
+			name:    "click a button with 1 element produces new JoltageRequirement",
+			current: JoltageRequirement{0, 1, 2, 3},
+			click:   Button{0},
+			want:    JoltageRequirement{1, 1, 2, 3},
+		},
+
+		{
+			name:    "click a button with multiple elements produces new JoltageRequirement",
+			current: JoltageRequirement{0, 1, 2, 3},
+			click:   Button{0, 3},
+			want:    JoltageRequirement{1, 1, 2, 4},
+		},
 	}
 
 	for _, tc := range tests {
