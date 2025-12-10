@@ -13,8 +13,31 @@ func calculateFewestButtonClicksForJoltageRequirements(machine Machine) int {
 	for range machine.requirements {
 		initialJoltage = append(initialJoltage, 0)
 	}
-	fmt.Println("initialVoltage: ", initialJoltage)
-	return calculateFewestButtonClicksRemaining(machine, initialJoltage)
+
+	stack := []JoltageRequirement{initialJoltage}
+	n := 1
+	for {
+		var reqsToCheck []JoltageRequirement
+		reqsToCheck = append(reqsToCheck, stack...)
+		stack = nil
+
+		for _, r := range reqsToCheck {
+			for _, b := range machine.buttons {
+				nextReq := makeNextJoltageRequirement(r, b)
+				if areRequirementsEqual(machine.requirements, nextReq) {
+					return n
+				}
+
+				if isImpossiblePath(machine.requirements, nextReq) {
+					continue
+				}
+
+				stack = append(stack, nextReq)
+			}
+		}
+
+		n++
+	}
 }
 
 func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequirement) int {
@@ -110,7 +133,7 @@ func algorithm10_2(lines []string) int {
 	// 	total += calculateFewestButtonClicksForJoltageRequirements(m)
 	// 	// fmt.Println(m)
 	// }
-	calculateFewestButtonClicksForJoltageRequirements(machines[0])
+	fmt.Println("min: ", calculateFewestButtonClicksForJoltageRequirements(machines[0]))
 	// fmt.Println("equal? ", areRequirementsEqual(machines[0].requirements, JoltageRequirement{3, 5, 4, 7}))
 
 	// m := machines[0]
