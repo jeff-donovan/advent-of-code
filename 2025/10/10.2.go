@@ -1,6 +1,6 @@
 package main
 
-func algorithm10_1(lines []string) int {
+func algorithm10_2(lines []string) int {
 	total := 0
 
 	machines := makeMachines(lines)
