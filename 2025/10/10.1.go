@@ -27,6 +27,32 @@ func calculateFewestButtonClicks(machine Machine) int {
 	return 0
 }
 
+func makeEndResult(machine Machine, clicks []Button) IndicatorLightDiagram {
+	generatedDiagram := make(IndicatorLightDiagram, len(machine.diagram))
+	for _, click := range clicks {
+		for _, i := range click {
+			generatedDiagram[i] = !generatedDiagram[i]
+		}
+	}
+	return generatedDiagram
+}
+
+func areDiagramsEqual(a, b IndicatorLightDiagram) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for _, avalue := range a {
+		for _, bvalue := range b {
+			if avalue != bvalue {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
 func generatePermutations(buttons []Button, n int) [][]Button {
 	var permutations [][]Button
 	if n == 1 {
