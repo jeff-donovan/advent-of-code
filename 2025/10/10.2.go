@@ -129,8 +129,9 @@ func algorithm10_2(lines []string) int {
 	total := 0
 
 	machines := makeMachines(lines)
-	for _, m := range machines {
+	for i, m := range machines {
 		total += calculateFewestButtonClicksForJoltageRequirements(m)
+		fmt.Println("calculated min button clicks for machine ", i)
 		// fmt.Println(m)
 	}
 	// fmt.Println("min: ", calculateFewestButtonClicksForJoltageRequirements(machines[0]))
