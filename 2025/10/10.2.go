@@ -33,8 +33,9 @@ func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequir
 	for _, click := range machine.buttons {
 		val := calculateFewestButtonClicksRemaining(machine, makeNextJoltageRequirement(current, click))
 		if val != math.MaxInt {
-			fmt.Println("val is: ", val)
+			// fmt.Println("val is: ", val)
 			produces = append(produces, 1+val)
+			fmt.Println("length of produces is: ", len(produces))
 		}
 	}
 
