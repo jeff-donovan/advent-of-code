@@ -114,14 +114,9 @@ func isImpossiblePath(n int, machine *Machine, current JoltageRequirement) bool 
 	key := makeJoltageReqKey(current)
 	nMap, exists := machine.isImpossiblePathMap[key]
 	if exists {
-		for i := n; i > 0; i-- {
-			_, existsForI := nMap[i]
-			if existsForI {
-				for j := n; j > i; j-- {
-					addJoltageRequirementToImpossibleMap(j, machine, current)
-				}
-				return true
-			}
+		_, existsForN := nMap[n]
+		if existsForN {
+			return true
 		}
 	}
 
