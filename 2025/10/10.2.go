@@ -5,16 +5,13 @@ import (
 	"math"
 )
 
-func calculateFewestButtonClicksForJoltageRequirements(machine Machine) int {
+func calculateFewestButtonClicksForJoltageRequirements(machine Machine, currentJoltage JoltageRequirement) int {
 	// set up initial joltagereq
 	// call calculateFewestButtonClicksRemaining
 
-	var initialJoltage JoltageRequirement
-	for range machine.requirements {
-		initialJoltage = append(initialJoltage, 0)
-	}
+	// check right now if isImpossiblePath
 
-	stack := []JoltageRequirement{initialJoltage}
+	stack := []JoltageRequirement{currentJoltage}
 	n := 1
 	for {
 		var reqsToCheck []JoltageRequirement
@@ -130,7 +127,12 @@ func algorithm10_2(lines []string) int {
 
 	machines := makeMachines(lines)
 	for i, m := range machines {
-		total += calculateFewestButtonClicksForJoltageRequirements(m)
+		var initialJoltage JoltageRequirement
+		for range m.requirements {
+			initialJoltage = append(initialJoltage, 0)
+		}
+
+		total += calculateFewestButtonClicksForJoltageRequirements(m, initialJoltage)
 		fmt.Println("calculated min button clicks for machine ", i)
 		// fmt.Println(m)
 	}
