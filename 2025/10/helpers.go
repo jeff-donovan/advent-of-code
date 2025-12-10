@@ -144,7 +144,7 @@ func makeJoltageRequirements(line string) JoltageRequirement {
 	rightCurlyBrace := strings.Index(line, "}")
 	reqString := line[leftCurlyBrace+1 : rightCurlyBrace]
 
-	for _, char := range reqString {
+	for _, char := range strings.Split(reqString, ",") {
 		req, _ := strconv.Atoi(string(char))
 		requirements = append(requirements, req)
 	}
