@@ -22,6 +22,20 @@ func TestAreRequirementsEqual(t *testing.T) {
 			b:    JoltageRequirement{0, 1, 2},
 			want: true,
 		},
+
+		{
+			name: "reqs with diff values are NOT equal",
+			a:    JoltageRequirement{0, 2, 1},
+			b:    JoltageRequirement{0, 1, 2},
+			want: false,
+		},
+
+		{
+			name: "reqs with diff lengths are NOT equal",
+			a:    JoltageRequirement{0, 1},
+			b:    JoltageRequirement{0, 1, 2},
+			want: false,
+		},
 	}
 
 	for _, tc := range tests {
