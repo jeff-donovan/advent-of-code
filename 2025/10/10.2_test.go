@@ -2,6 +2,31 @@ package main
 
 import "testing"
 
+func TestCalculateFewestButtonClicksRemaining(t *testing.T) {
+	tests := []struct {
+		name    string
+		machine Machine
+		current JoltageRequirement
+		want    int
+	}{
+		{
+			name:    "0 when Machine requirements match current",
+			machine: Machine{nil, nil, JoltageRequirement{0, 1, 2}},
+			current: JoltageRequirement{0, 1, 2},
+			want:    0,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := calculateFewestButtonClicksRemaining(tc.machine, tc.current)
+			if got != tc.want {
+				t.Fatalf("calculateFewestButtonClicksRemaining(%v, %v) = %v, want %v", tc.machine, tc.current, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestMakeNextJoltageRequirement(t *testing.T) {
 	tests := []struct {
 		name    string
