@@ -1,19 +1,60 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func calculateFewestButtonClicksForJoltageRequirements(machine Machine) int {
-	n := 1
-	for {
-		permutations := generatePermutations(machine.buttons, n)
-		for _, p := range permutations {
-			result := makeEndResultJoltageRequirements(machine, p)
-			if areRequirementsEqual(machine.requirements, result) {
-				return n
-			}
-		}
-		n++
+	// set up initial joltagereq
+	// call calculateFewestButtonClicksRemaining
+
+	var initialJoltage JoltageRequirement
+	for range machine.requirements {
+		initialJoltage = append(initialJoltage, 0)
 	}
+	fmt.Println("initialVoltage: ", initialJoltage)
+	return calculateFewestButtonClicksRemaining(machine, initialJoltage)
+}
+
+func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequirement) int {
+	fmt.Println("current: ", current)
+	if areRequirementsEqual(machine.requirements, current) {
+		return 0
+	}
+
+	if isImpossiblePath(machine.requirements, current) {
+		return math.MaxInt
+	}
+
+	// fmt.Println("NOT! impossible path!")
+	var produces []int
+	// TODO: trim Infinity
+	for _, click := range machine.buttons {
+		val := calculateFewestButtonClicksRemaining(machine, makeNextJoltageRequirement(current, click))
+		if val != math.MaxInt {
+			produces = append(produces, 1+val)
+		}
+	}
+
+	minVal := math.MaxInt
+	for _, v := range produces {
+		if v < minVal {
+			minVal = v
+		}
+	}
+	return minVal
+}
+
+func makeNextJoltageRequirement(current JoltageRequirement, click Button) JoltageRequirement {
+	var next JoltageRequirement
+	next = append(next, current...)
+
+	for _, i := range click {
+		next[i]++
+	}
+
+	return next
 }
 
 func makeEndResultJoltageRequirements(machine Machine, clicks []Button) JoltageRequirement {
@@ -28,6 +69,20 @@ func makeEndResultJoltageRequirements(machine Machine, clicks []Button) JoltageR
 	}
 	// fmt.Println("generatedRequirements after: ", generatedRequirements)
 	return generatedRequirements
+}
+
+func isImpossiblePath(req JoltageRequirement, current JoltageRequirement) bool {
+	if len(req) != len(current) {
+		panic("unexpectedly different lengths!")
+	}
+
+	for i := range req {
+		if current[i] > req[i] {
+			return true
+		}
+	}
+
+	return false
 }
 
 func areRequirementsEqual(a, b JoltageRequirement) bool {
@@ -49,9 +104,20 @@ func algorithm10_2(lines []string) int {
 	total := 0
 
 	machines := makeMachines(lines)
-	for _, m := range machines {
-		total += calculateFewestButtonClicksForJoltageRequirements(m)
-	}
+	// for _, m := range machines {
+	// 	total += calculateFewestButtonClicksForJoltageRequirements(m)
+	// 	// fmt.Println(m)
+	// }
+	// calculateFewestButtonClicksForJoltageRequirements(machines[0])
+	fmt.Println("equal? ", areRequirementsEqual(machines[0].requirements, JoltageRequirement{3, 5, 4, 7}))
+
+	// m := machines[0]
+	// current := JoltageRequirement{3, 0, 0, 0}
+	// fmt.Println(makeNextJoltageRequirement(current, Button{3}))
+
+	// plan
+	//  - once a value is greater than the corresponding value in the requirements, we've found an impossible permutation path
+	//  - need to use recursion or maybe a stack
 
 	// machine := machines[0]
 	// result := calculateFewestButtonClicks(machine)
