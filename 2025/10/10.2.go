@@ -18,7 +18,7 @@ func calculateFewestButtonClicksForJoltageRequirements(machine Machine) int {
 }
 
 func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequirement) int {
-	fmt.Println("current: ", current)
+	// fmt.Println("current: ", current)
 	if areRequirementsEqual(machine.requirements, current) {
 		return 0
 	}
@@ -33,6 +33,7 @@ func calculateFewestButtonClicksRemaining(machine Machine, current JoltageRequir
 	for _, click := range machine.buttons {
 		val := calculateFewestButtonClicksRemaining(machine, makeNextJoltageRequirement(current, click))
 		if val != math.MaxInt {
+			fmt.Println("val is: ", val)
 			produces = append(produces, 1+val)
 		}
 	}
@@ -108,8 +109,8 @@ func algorithm10_2(lines []string) int {
 	// 	total += calculateFewestButtonClicksForJoltageRequirements(m)
 	// 	// fmt.Println(m)
 	// }
-	// calculateFewestButtonClicksForJoltageRequirements(machines[0])
-	fmt.Println("equal? ", areRequirementsEqual(machines[0].requirements, JoltageRequirement{3, 5, 4, 7}))
+	calculateFewestButtonClicksForJoltageRequirements(machines[0])
+	// fmt.Println("equal? ", areRequirementsEqual(machines[0].requirements, JoltageRequirement{3, 5, 4, 7}))
 
 	// m := machines[0]
 	// current := JoltageRequirement{3, 0, 0, 0}
