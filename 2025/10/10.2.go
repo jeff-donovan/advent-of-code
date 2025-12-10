@@ -8,13 +8,13 @@ import (
 )
 
 func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, currentJoltage JoltageRequirement) int {
-	fmt.Println("map: ", machine.isImpossiblePathMap)
+	// fmt.Println("map: ", machine.isImpossiblePathMap)
 	if areRequirementsEqual(machine.requirements, currentJoltage) {
 		return n
 	}
 
 	if n > machine.minVal {
-		return math.MaxInt
+		return n
 	}
 
 	if isImpossiblePath(machine, currentJoltage) {
@@ -37,7 +37,7 @@ func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, 
 
 	if minVal == math.MaxInt || minVal > machine.minVal {
 		addJoltageRequirementToImpossibleMap(machine, currentJoltage)
-		return math.MaxInt
+		return minVal
 	}
 
 	machine.minVal = minVal
@@ -159,8 +159,9 @@ func algorithm10_2(lines []string) int {
 			initialJoltage = append(initialJoltage, 0)
 		}
 
-		total += calculateFewestButtonClicksForJoltageRequirements(0, &m, initialJoltage)
-		fmt.Println("calculated min button clicks for machine ", i)
+		val := calculateFewestButtonClicksForJoltageRequirements(0, &m, initialJoltage)
+		fmt.Printf("calculated min button clicks for machine %d: %d\n", i, val)
+		total += val
 		// fmt.Println(m)
 	}
 	// fmt.Println("min: ", calculateFewestButtonClicksForJoltageRequirements(machines[0]))
