@@ -2,6 +2,31 @@ package main
 
 import "testing"
 
+func TestMakeNextJoltageRequirement(t *testing.T) {
+	tests := []struct {
+		name    string
+		current JoltageRequirement
+		click   Button
+		want    JoltageRequirement
+	}{
+		{
+			name:    "click an empty button produces same JoltageRequirement",
+			current: JoltageRequirement{0, 1, 2, 3},
+			click:   nil,
+			want:    JoltageRequirement{0, 1, 2, 3},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := makeNextJoltageRequirement(tc.current, tc.click)
+			if !areRequirementsEqual(got, tc.want) {
+				t.Fatalf("makeNextJoltageRequirement(%v, %v) = %v, want %v", tc.current, tc.click, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestIsImpossiblePath(t *testing.T) {
 	tests := []struct {
 		name    string
