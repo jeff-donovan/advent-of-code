@@ -17,7 +17,7 @@ func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, 
 		return n
 	}
 
-	if isImpossiblePath(machine, currentJoltage) {
+	if isImpossiblePath(n, machine, currentJoltage) {
 		return math.MaxInt
 	}
 
@@ -36,7 +36,7 @@ func calculateFewestButtonClicksForJoltageRequirements(n int, machine *Machine, 
 	}
 
 	if minVal == math.MaxInt || minVal > machine.minVal {
-		addJoltageRequirementToImpossibleMap(machine, currentJoltage)
+		addJoltageRequirementToImpossibleMap(n, machine, currentJoltage)
 		return minVal
 	}
 
@@ -50,7 +50,7 @@ func calculateFewestButtonClicksRemaining(machine *Machine, current JoltageRequi
 		return 0
 	}
 
-	if isImpossiblePath(machine, current) {
+	if isImpossiblePath(0, machine, current) {
 		return math.MaxInt
 	}
 
@@ -100,16 +100,24 @@ func makeEndResultJoltageRequirements(machine Machine, clicks []Button) JoltageR
 	return generatedRequirements
 }
 
-func addJoltageRequirementToImpossibleMap(machine *Machine, current JoltageRequirement) {
-	key := makeJoltageReqKey(current)
-	machine.isImpossiblePathMap[key] = struct{}{}
-}
-
-func isImpossiblePath(machine *Machine, current JoltageRequirement) bool {
+func addJoltageRequirementToImpossibleMap(n int, machine *Machine, current JoltageRequirement) {
 	key := makeJoltageReqKey(current)
 	_, exists := machine.isImpossiblePathMap[key]
+	if !exists {
+		machine.isImpossiblePathMap[key] = make(map[int]struct{})
+	}
+
+	machine.isImpossiblePathMap[key][n] = struct{}{}
+}
+
+func isImpossiblePath(n int, machine *Machine, current JoltageRequirement) bool {
+	key := makeJoltageReqKey(current)
+	nMap, exists := machine.isImpossiblePathMap[key]
 	if exists {
-		return true
+		_, existsForN := nMap[n]
+		if existsForN {
+			return true
+		}
 	}
 
 	if len(machine.requirements) != len(current) {
@@ -118,7 +126,7 @@ func isImpossiblePath(machine *Machine, current JoltageRequirement) bool {
 
 	for i := range machine.requirements {
 		if current[i] > machine.requirements[i] {
-			addJoltageRequirementToImpossibleMap(machine, current)
+			addJoltageRequirementToImpossibleMap(n, machine, current)
 			return true
 		}
 	}

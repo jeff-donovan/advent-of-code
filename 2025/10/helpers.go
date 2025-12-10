@@ -14,7 +14,7 @@ type Machine struct {
 	diagram             IndicatorLightDiagram
 	buttons             []Button
 	requirements        JoltageRequirement
-	isImpossiblePathMap map[string]struct{}
+	isImpossiblePathMap map[string]map[int]struct{}
 	minVal              int
 }
 
@@ -93,7 +93,7 @@ func makeMachines(lines []string) []Machine {
 	var machines []Machine
 
 	for _, l := range lines {
-		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l), make(map[string]struct{}), math.MaxInt})
+		machines = append(machines, Machine{makeDiagram(l), makeButtons(l), makeJoltageRequirements(l), make(map[string]map[int]struct{}), math.MaxInt})
 	}
 
 	return machines
