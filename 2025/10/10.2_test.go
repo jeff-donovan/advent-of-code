@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestCalculateFewestButtonClicksRemaining(t *testing.T) {
 	tests := []struct {
@@ -14,6 +17,20 @@ func TestCalculateFewestButtonClicksRemaining(t *testing.T) {
 			machine: Machine{nil, nil, JoltageRequirement{0, 1, 2}},
 			current: JoltageRequirement{0, 1, 2},
 			want:    0,
+		},
+
+		{
+			name:    "math.MaxInt when we've gone past machine requirements",
+			machine: Machine{nil, nil, JoltageRequirement{0}},
+			current: JoltageRequirement{1},
+			want:    math.MaxInt,
+		},
+
+		{
+			name:    "1 when 1 button click will produce machine requirements",
+			machine: Machine{nil, []Button{{0}}, JoltageRequirement{1}},
+			current: JoltageRequirement{0},
+			want:    1,
 		},
 	}
 
