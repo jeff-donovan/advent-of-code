@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"slices"
+	"strings"
 )
 
 func algorithm11_2(lines []string) int {
@@ -10,28 +10,27 @@ func algorithm11_2(lines []string) int {
 	deviceMap := makeDeviceMap(lines)
 	fmt.Println("deviceMap: ", deviceMap)
 
-	var stack [][]string
-	for _, next := range deviceMap["svr"] {
-		stack = append(stack, []string{next})
-	}
-
+	var stack []string
+	stack = append(stack, deviceMap["svr"]...)
 	for len(stack) > 0 {
-		var next [][]string
+		var next []string
 		next = append(next, stack...)
 		stack = nil
 
 		for _, current := range next {
-			if current[len(current)-1] == "out" {
-				dacIndex := slices.Index(current, "dac")
-				fftIndex := slices.Index(current, "fft")
+			// fmt.Println("current: ", current)
+			currentDevice := current[len(current)-3:]
+			if currentDevice == "out" {
+				dacIndex := strings.Index(current, "dac")
+				fftIndex := strings.Index(current, "fft")
 				if dacIndex != -1 && fftIndex != -1 {
 					total += 1
 				}
 				continue
 			}
 
-			for _, nextDevice := range deviceMap[current[len(current)-1]] {
-				stack = append(stack, slices.Concat(current, []string{nextDevice}))
+			for _, nextDevice := range deviceMap[currentDevice] {
+				stack = append(stack, current+nextDevice)
 			}
 		}
 	}
