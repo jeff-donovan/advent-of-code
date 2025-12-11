@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_input.txt")
-	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_input.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
@@ -22,7 +22,7 @@ func main() {
 
 	start := time.Now()
 
-	total := algorithm11_1(lines)
+	total := algorithm11_2(lines)
 
 	fmt.Println("Answer: ", total)
 

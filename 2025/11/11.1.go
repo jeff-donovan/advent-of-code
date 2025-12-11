@@ -5,11 +5,6 @@ import (
 	"strings"
 )
 
-type Device struct {
-	name    string
-	devices []string
-}
-
 func makeDeviceMap(lines []string) map[string][]string {
 	deviceMap := make(map[string][]string)
 	for _, l := range lines {
