@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_input.txt")
-	f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test.txt")
+	f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test.txt")
 	if err != nil {
 		fmt.Println("Error opening file", err)
 		return
