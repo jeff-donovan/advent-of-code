@@ -3,6 +3,10 @@ package main
 import "testing"
 
 func presentsEqual(a, b Present) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
 	for i := range a {
 		if a[i] != b[i] {
 			return false
@@ -23,6 +27,13 @@ func TestRotate90DegreesNTimes(t *testing.T) {
 			a:    []string{"###", "##.", "##."},
 			n:    0,
 			want: []string{"###", "##.", "##."},
+		},
+
+		{
+			name: "rotating 90 degrees 1 time",
+			a:    []string{"###", "##.", "##."},
+			n:    1,
+			want: []string{"###", "###", "..#"},
 		},
 	}
 
