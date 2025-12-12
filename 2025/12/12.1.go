@@ -20,12 +20,15 @@ func rotate90DegreesNTimes(p Present, n int) Present {
 		return p
 	}
 
-	var newPresent Present
-	newPresent = append(newPresent, string(p[2][0])+string(p[1][0])+string(p[0][0]))
-	newPresent = append(newPresent, string(p[2][1])+string(p[1][1])+string(p[0][1]))
-	newPresent = append(newPresent, string(p[2][2])+string(p[1][2])+string(p[0][2]))
+	if n == 1 {
+		var newPresent Present
+		newPresent = append(newPresent, string(p[2][0])+string(p[1][0])+string(p[0][0]))
+		newPresent = append(newPresent, string(p[2][1])+string(p[1][1])+string(p[0][1]))
+		newPresent = append(newPresent, string(p[2][2])+string(p[1][2])+string(p[0][2]))
+		return newPresent
+	}
 
-	return newPresent
+	return rotate90DegreesNTimes(rotate90DegreesNTimes(p, 1), n-1)
 }
 
 func makePresents(lines []string) []Present {

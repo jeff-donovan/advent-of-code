@@ -35,6 +35,27 @@ func TestRotate90DegreesNTimes(t *testing.T) {
 			n:    1,
 			want: []string{"###", "###", "..#"},
 		},
+
+		{
+			name: "rotating 90 degrees 2 times",
+			a:    []string{"###", "##.", "##."},
+			n:    2,
+			want: []string{".##", ".##", "###"},
+		},
+
+		{
+			name: "rotating 90 degrees 3 times",
+			a:    []string{"###", "##.", "##."},
+			n:    3,
+			want: []string{"#..", "###", "###"},
+		},
+
+		{
+			name: "rotating 90 degrees 4 times produces the same Present",
+			a:    []string{"###", "##.", "##."},
+			n:    4,
+			want: []string{"###", "##.", "##."},
+		},
 	}
 
 	for _, tc := range tests {
