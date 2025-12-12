@@ -15,6 +15,81 @@ func presentsEqual(a, b Present) bool {
 	return true
 }
 
+func TestFlipHorizontal(t *testing.T) {
+	tests := []struct {
+		name string
+		a    Present
+		want Present
+	}{
+		{
+			name: "flipping horizontal",
+			a:    []string{"###", "##.", "##."},
+			want: []string{"###", ".##", ".##"},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := flipHorizontal(tc.a)
+			if !presentsEqual(got, tc.want) {
+				t.Fatalf("flipHorizontal(%v) = %v, want %v", tc.a, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestReverseString(t *testing.T) {
+	tests := []struct {
+		name string
+		a    string
+		want string
+	}{
+		{
+			name: "reverse empty string produces empty string",
+			a:    "",
+			want: "",
+		},
+
+		{
+			name: "reverse jeff",
+			a:    "jeff",
+			want: "ffej",
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := reverseString(tc.a)
+			if got != tc.want {
+				t.Fatalf("reverseString(%v) = %v, want %v", tc.a, got, tc.want)
+			}
+		})
+	}
+}
+
+func TestFlipVertical(t *testing.T) {
+	tests := []struct {
+		name string
+		a    Present
+		want Present
+	}{
+		{
+			name: "flipping vertical",
+			a:    []string{"###", "##.", "##."},
+			want: []string{"##.", "##.", "###"},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := flipVertical(tc.a)
+			if !presentsEqual(got, tc.want) {
+				t.Fatalf("flipVertical(%v) = %v, want %v", tc.a, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestRotate90DegreesNTimes(t *testing.T) {
 	tests := []struct {
 		name string

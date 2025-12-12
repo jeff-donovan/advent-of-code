@@ -31,6 +31,30 @@ func rotate90DegreesNTimes(p Present, n int) Present {
 	return rotate90DegreesNTimes(rotate90DegreesNTimes(p, 1), n-1)
 }
 
+func flipHorizontal(p Present) Present {
+	var newPresent Present
+	newPresent = append(newPresent, reverseString(p[0]))
+	newPresent = append(newPresent, reverseString(p[1]))
+	newPresent = append(newPresent, reverseString(p[2]))
+	return newPresent
+}
+
+func reverseString(s string) string {
+	newString := ""
+	for _, char := range s {
+		newString = string(char) + newString
+	}
+	return newString
+}
+
+func flipVertical(p Present) Present {
+	var newPresent Present
+	newPresent = append(newPresent, p[2])
+	newPresent = append(newPresent, p[1])
+	newPresent = append(newPresent, p[0])
+	return newPresent
+}
+
 func makePresents(lines []string) []Present {
 	var presents []Present
 
