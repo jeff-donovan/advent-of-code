@@ -15,6 +15,14 @@ type Tree struct {
 	presentCounts []int
 }
 
+func rotate90DegreesNTimes(p Present, n int) Present {
+	if n == 0 {
+		return p
+	}
+
+	return nil
+}
+
 func makePresents(lines []string) []Present {
 	var presents []Present
 
