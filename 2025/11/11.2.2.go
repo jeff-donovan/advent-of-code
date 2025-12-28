@@ -37,5 +37,9 @@ func algorithm11_2_2(lines []string) int {
 	fmt.Println()
 	fmt.Println(backwardsMap)
 
+	fmt.Println()
+	fmt.Println("deviceMap: ", len(deviceMap))
+	fmt.Println("backwardsMap: ", len(backwardsMap))
+
 	return total
 }
