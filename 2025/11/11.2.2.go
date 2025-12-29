@@ -45,6 +45,10 @@ func dfs(backwardsMap map[string][]string, currentNode string, validNodes map[st
 		return true
 	}
 
+	if _, ok := validNodes[currentNode]; ok {
+		return true
+	}
+
 	neighbors := backwardsMap[currentNode]
 
 	areAnyNeighborsValid := false
