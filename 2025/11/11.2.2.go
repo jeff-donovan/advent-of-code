@@ -28,14 +28,15 @@ func addIfNotExists(nodes []string, newNode string) []string {
 	return append(nodes, newNode)
 }
 
-func dfsCountPathsThatLeadFromSvrToOut(graph map[string][]string) int {
+func dfsCountPaths(graph map[string][]string) int {
 	paths := make(map[string]int)
 	currentNode := "svr"
-	return dfs(graph, paths, currentNode)
+	endNode := "out"
+	return dfs(graph, paths, currentNode, endNode)
 }
 
-func dfs(graph map[string][]string, paths map[string]int, currentNode string) int {
-	if currentNode == "out" {
+func dfs(graph map[string][]string, paths map[string]int, currentNode string, endNode string) int {
+	if currentNode == endNode {
 		return 1
 	}
 
@@ -47,7 +48,7 @@ func dfs(graph map[string][]string, paths map[string]int, currentNode string) in
 
 	numPathsFromNeighbors := 0
 	for _, nextNode := range neighbors {
-		numPathsFromNeighbors += dfs(graph, paths, nextNode)
+		numPathsFromNeighbors += dfs(graph, paths, nextNode, endNode)
 	}
 
 	paths[currentNode] = numPathsFromNeighbors
@@ -64,7 +65,7 @@ func algorithm11_2_2(lines []string) int {
 
 	fmt.Println("deviceMap: ", len(deviceMap))
 
-	return dfsCountPathsThatLeadFromSvrToOut(deviceMap)
+	return dfsCountPaths(deviceMap)
 	// fmt.Println()
 	// fmt.Println("nodes to consider: ", len(nodesToConsider))
 	// // fmt.Println(nodesToConsider)
