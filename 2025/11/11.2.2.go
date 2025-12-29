@@ -18,6 +18,16 @@ func makeBackwardsDeviceMap(deviceMap map[string][]string) map[string][]string {
 	return backwardsMap
 }
 
+func addIfNotExists(nodes []string, newNode string) []string {
+	for _, n := range nodes {
+		if n == newNode {
+			return nodes
+		}
+	}
+
+	return append(nodes, newNode)
+}
+
 func dfsNodesThatLeadFromOutToSvr(backwardsMap map[string][]string) []string {
 	validNodes := make(map[string]struct{})
 	currentNode := "out"
@@ -36,26 +46,20 @@ func dfs(backwardsMap map[string][]string, currentNode string, validNodes map[st
 	}
 
 	neighbors := backwardsMap[currentNode]
+
+	areAnyNeighborsValid := false
 	for _, nextNode := range neighbors {
 		isValid := dfs(backwardsMap, nextNode, validNodes)
 		if isValid {
-			validNodes[nextNode] = struct{}{}
-			validNodes[currentNode] = struct{}{}
-			return true
+			areAnyNeighborsValid = true
 		}
 	}
 
-	return false
-}
-
-func addIfNotExists(nodes []string, newNode string) []string {
-	for _, n := range nodes {
-		if n == newNode {
-			return nodes
-		}
+	if areAnyNeighborsValid {
+		validNodes[currentNode] = struct{}{}
 	}
 
-	return append(nodes, newNode)
+	return areAnyNeighborsValid
 }
 
 func algorithm11_2_2(lines []string) int {
@@ -63,18 +67,18 @@ func algorithm11_2_2(lines []string) int {
 	deviceMap := makeDeviceMap(lines)
 	backwardsMap := makeBackwardsDeviceMap(deviceMap)
 
-	fmt.Println(deviceMap)
-	fmt.Println()
-	fmt.Println(backwardsMap)
+	// fmt.Println(deviceMap)
+	// fmt.Println()
+	// fmt.Println(backwardsMap)
 
-	fmt.Println()
+	// fmt.Println()
 	fmt.Println("deviceMap: ", len(deviceMap))
 	fmt.Println("backwardsMap: ", len(backwardsMap))
 
 	nodesToConsider := dfsNodesThatLeadFromOutToSvr(backwardsMap)
 	fmt.Println()
 	fmt.Println("nodes to consider: ", len(nodesToConsider))
-	fmt.Println(nodesToConsider)
+	// fmt.Println(nodesToConsider)
 
 	return total
 }
