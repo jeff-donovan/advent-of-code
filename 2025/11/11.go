@@ -23,7 +23,8 @@ func main() {
 
 	start := time.Now()
 
-	total := algorithm11_2_2(lines)
+	// total := algorithm11_1(lines)
+	total := algorithm11_2(lines)
 
 	fmt.Println("Answer: ", total)
 

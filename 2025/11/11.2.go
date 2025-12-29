@@ -28,7 +28,7 @@ func dfs(graph map[string][]string, paths map[string]int, currentNode string, en
 	return numPathsFromNeighbors
 }
 
-func algorithm11_2_2(lines []string) int {
+func algorithm11_2(lines []string) int {
 	deviceMap := makeDeviceMap(lines)
 
 	return dfsCountPaths(deviceMap)
