@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+)
+
+func main() {
+	f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_input.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test.txt")
+	// f, err := os.Open("C:/code/advent-of-code/2025/11/day_11_test_2.txt")
+	if err != nil {
+		fmt.Println("Error opening file", err)
+		return
+	}
+
+	defer f.Close()
+	lines, err := parseInput(f)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+	}
+
+	start := time.Now()
+
+	// total := algorithm11_1(lines)
+	total := algorithm11_2(lines)
+
+	fmt.Println("Answer: ", total)
+
+	fmt.Println("took: ", time.Since(start))
+}
