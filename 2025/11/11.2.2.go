@@ -30,11 +30,12 @@ func addIfNotExists(nodes []string, newNode string) []string {
 
 func dfsCountPathsThatLeadFromSvrToOut(graph map[string][]string) int {
 	scores := make(map[string]int)
-	currentNode := "svr"
-	return dfs(graph, scores, currentNode)
+	path := "svr"
+	return dfs(graph, scores, path)
 }
 
-func dfs(graph map[string][]string, scores map[string]int, currentNode string) int {
+func dfs(graph map[string][]string, scores map[string]int, path string) int {
+	currentNode := path[len(path)-3:]
 	if currentNode == "out" {
 		return 1
 	}
@@ -47,7 +48,8 @@ func dfs(graph map[string][]string, scores map[string]int, currentNode string) i
 
 	numPathsFromNeighbors := 0
 	for _, nextNode := range neighbors {
-		numPathsFromNeighbors += dfs(graph, scores, nextNode)
+		nextPath := path + nextNode
+		numPathsFromNeighbors += dfs(graph, scores, nextPath)
 	}
 
 	scores[currentNode] = numPathsFromNeighbors
