@@ -28,46 +28,35 @@ func addIfNotExists(nodes []string, newNode string) []string {
 	return append(nodes, newNode)
 }
 
-func dfsNodesThatLeadFromSvrToOut(graph map[string][]string) []string {
-	validNodes := make(map[string]struct{})
+func dfsCountPathsThatLeadFromSvrToOut(graph map[string][]string) int {
+	paths := make(map[string]int)
 	currentNode := "svr"
-	dfs(graph, currentNode, validNodes)
-
-	var result []string
-	for node := range validNodes {
-		result = append(result, node)
-	}
-	return result
+	return dfs(graph, currentNode, paths)
 }
 
-func dfs(graph map[string][]string, currentNode string, validNodes map[string]struct{}) bool {
+func dfs(graph map[string][]string, currentNode string, paths map[string]int) int {
 	if currentNode == "out" {
-		return true
+		return 1
 	}
 
-	if _, ok := validNodes[currentNode]; ok {
-		return true
+	if numPaths, ok := paths[currentNode]; ok {
+		return numPaths
 	}
 
 	neighbors := graph[currentNode]
 
-	areAnyNeighborsValid := false
+	numPathsFromNeighbors := 0
 	for _, nextNode := range neighbors {
-		isValid := dfs(graph, nextNode, validNodes)
-		if isValid {
-			areAnyNeighborsValid = true
-		}
+		numPathsFromNeighbors += dfs(graph, nextNode, paths)
 	}
 
-	if areAnyNeighborsValid {
-		validNodes[currentNode] = struct{}{}
-	}
+	paths[currentNode] = numPathsFromNeighbors
 
-	return areAnyNeighborsValid
+	return numPathsFromNeighbors
 }
 
 func algorithm11_2_2(lines []string) int {
-	total := 0
+	// total := 0
 	deviceMap := makeDeviceMap(lines)
 
 	// fmt.Println(deviceMap)
@@ -75,10 +64,10 @@ func algorithm11_2_2(lines []string) int {
 
 	fmt.Println("deviceMap: ", len(deviceMap))
 
-	nodesToConsider := dfsNodesThatLeadFromSvrToOut(deviceMap)
-	fmt.Println()
-	fmt.Println("nodes to consider: ", len(nodesToConsider))
-	// fmt.Println(nodesToConsider)
+	return dfsCountPathsThatLeadFromSvrToOut(deviceMap)
+	// fmt.Println()
+	// fmt.Println("nodes to consider: ", len(nodesToConsider))
+	// // fmt.Println(nodesToConsider)
 
-	return total
+	// return total
 }
