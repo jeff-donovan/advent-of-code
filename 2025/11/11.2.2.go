@@ -29,10 +29,10 @@ func addIfNotExists(nodes []string, newNode string) []string {
 }
 
 func dfsCountPaths(graph map[string][]string) int {
-	paths := make(map[string]int)
-	currentNode := "svr"
-	endNode := "out"
-	return dfs(graph, paths, currentNode, endNode)
+	numPathsFromSvrToFft := dfs(graph, make(map[string]int), "svr", "fft")
+	numPathsFromFftToDac := dfs(graph, make(map[string]int), "fft", "dac")
+	numPathsFromDacToOut := dfs(graph, make(map[string]int), "dac", "out")
+	return numPathsFromSvrToFft * numPathsFromFftToDac * numPathsFromDacToOut
 }
 
 func dfs(graph map[string][]string, paths map[string]int, currentNode string, endNode string) int {
