@@ -47,11 +47,10 @@ func dfs(machine *Machine, n int, currentJoltage JoltageRequirement) int {
 
 	minVal, exists := machine.minValsMap[key]
 	if exists {
+		if minVal == math.MaxInt {
+			return math.MaxInt
+		}
 		return n + minVal
-	}
-
-	if n >= machine.minVal {
-		return n
 	}
 
 	if isImpossible(machine, currentJoltage) {
@@ -66,9 +65,10 @@ func dfs(machine *Machine, n int, currentJoltage JoltageRequirement) int {
 
 	machine.minValsMap[key] = minClicksFromHere
 
-	machine.minVal = min(machine.minVal, n+minClicksFromHere)
-
-	return minClicksFromHere
+	if minClicksFromHere == math.MaxInt {
+		return math.MaxInt
+	}
+	return n + minClicksFromHere
 }
 
 func algorithm10_2_2(lines []string) int {
