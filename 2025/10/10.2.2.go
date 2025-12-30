@@ -41,16 +41,16 @@ func dfsMinimumClicks(machine Machine) int {
 func dfs(machine *Machine, n int, currentJoltage JoltageRequirement) int {
 	key := makeJoltageReqKey(currentJoltage)
 
-	if areEqual(machine.requirements, currentJoltage) {
-		return n
-	}
-
 	minVal, exists := machine.minValsMap[key]
 	if exists {
 		if minVal == math.MaxInt {
 			return math.MaxInt
 		}
 		return n + minVal
+	}
+
+	if areEqual(machine.requirements, currentJoltage) {
+		return n
 	}
 
 	if isImpossible(machine, currentJoltage) {
