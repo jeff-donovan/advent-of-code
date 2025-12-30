@@ -39,8 +39,15 @@ func dfsMinimumClicks(machine Machine) int {
 }
 
 func dfs(machine *Machine, n int, currentJoltage JoltageRequirement) int {
+	key := makeJoltageReqKey(currentJoltage)
+
 	if areEqual(machine.requirements, currentJoltage) {
 		return n
+	}
+
+	minVal, exists := machine.minValsMap[key]
+	if exists {
+		return n + minVal
 	}
 
 	if n >= machine.minVal {
@@ -51,15 +58,17 @@ func dfs(machine *Machine, n int, currentJoltage JoltageRequirement) int {
 		return math.MaxInt
 	}
 
-	minClicks := math.MaxInt
+	minClicksFromHere := math.MaxInt
 	for _, b := range machine.buttons {
 		nextReq := makeNextJoltageRequirement(currentJoltage, b)
-		minClicks = min(minClicks, dfs(machine, n+1, nextReq))
+		minClicksFromHere = min(minClicksFromHere, dfs(machine, 1, nextReq))
 	}
 
-	machine.minVal = min(machine.minVal, minClicks)
+	machine.minValsMap[key] = minClicksFromHere
 
-	return min(machine.minVal, minClicks)
+	machine.minVal = min(machine.minVal, n+minClicksFromHere)
+
+	return minClicksFromHere
 }
 
 func algorithm10_2_2(lines []string) int {
@@ -67,7 +76,7 @@ func algorithm10_2_2(lines []string) int {
 	machines := makeMachines(lines)
 	for i, m := range machines {
 		val := dfsMinimumClicks(m)
-		fmt.Printf("calculated min button clicks for machine %d: %d\n", i, val)
+		fmt.Printf("calculated min button clicks for machine %d: %d | machine minVal: %d\n", i, val, m.minVal)
 		total += val
 		// fmt.Println(m)
 	}
